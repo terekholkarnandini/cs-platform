@@ -55,7 +55,7 @@ const pieData = [
   { name: "Other", value: 6 },
 ];
 
-const pieColors = ["var(--chart-1)", "var(--chart-2)", "var(--chart-3)", "var(--chart-4)", "var(--chart-5)"];
+const pieColors = ["oklch(0.55 0.22 275)", "oklch(0.65 0.17 155)", "oklch(0.72 0.17 55)", "oklch(0.65 0.2 340)", "oklch(0.6 0.15 220)"];
 
 const activity = [
   { agent: "Response Agent", event: "Answered refund query", time: "just now", tag: "resolved" },
