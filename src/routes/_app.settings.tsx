@@ -45,7 +45,9 @@ function Settings() {
           <TabsContent value="profile" className="space-y-6">
             <div className="rounded-2xl border border-border bg-card p-6 shadow-card">
               <div className="text-sm font-semibold">Company profile</div>
-              <div className="text-xs text-muted-foreground">Basic information about your workspace</div>
+              <div className="text-xs text-muted-foreground">
+                Basic information about your workspace
+              </div>
               <div className="mt-6 flex items-center gap-4">
                 <div className="grid h-16 w-16 place-items-center rounded-2xl bg-gradient-primary text-white text-lg font-bold shadow-glow">
                   A
@@ -82,9 +84,13 @@ function Settings() {
                   <div className="text-sm font-semibold flex items-center gap-2">
                     Growth plan <Badge className="rounded-full">Active</Badge>
                   </div>
-                  <div className="text-xs text-muted-foreground mt-1">$249/month · renews Nov 8, 2025</div>
+                  <div className="text-xs text-muted-foreground mt-1">
+                    $249/month · renews Nov 8, 2025
+                  </div>
                 </div>
-                <Button variant="outline" className="rounded-lg" size="sm">Change plan</Button>
+                <Button variant="outline" className="rounded-lg" size="sm">
+                  Change plan
+                </Button>
               </div>
               <div className="mt-6 grid gap-4 sm:grid-cols-3">
                 {[
@@ -104,15 +110,24 @@ function Settings() {
           <TabsContent value="notifications" className="space-y-6">
             <div className="rounded-2xl border border-border bg-card p-6 shadow-card">
               <div className="text-sm font-semibold">Email notifications</div>
-              <div className="text-xs text-muted-foreground">Choose what you want to hear about</div>
+              <div className="text-xs text-muted-foreground">
+                Choose what you want to hear about
+              </div>
               <div className="mt-6 space-y-4">
                 {[
-                  { l: "Escalations to human agents", d: "When AI transfers a conversation", on: true },
+                  {
+                    l: "Escalations to human agents",
+                    d: "When AI transfers a conversation",
+                    on: true,
+                  },
                   { l: "Weekly summary", d: "Every Monday at 9am", on: true },
                   { l: "New CSAT below 3", d: "So you can follow up quickly", on: true },
                   { l: "Product updates", d: "New features and improvements", on: false },
                 ].map((n) => (
-                  <div key={n.l} className="flex items-center justify-between gap-4 pb-4 border-b border-border last:border-0 last:pb-0">
+                  <div
+                    key={n.l}
+                    className="flex items-center justify-between gap-4 pb-4 border-b border-border last:border-0 last:pb-0"
+                  >
                     <div>
                       <div className="text-sm font-medium">{n.l}</div>
                       <div className="text-xs text-muted-foreground">{n.d}</div>
@@ -134,7 +149,10 @@ function Settings() {
                   { l: "SSO / SAML", d: "Enterprise plan required", on: false },
                   { l: "IP allowlist", d: "Restrict dashboard access by IP", on: false },
                 ].map((n) => (
-                  <div key={n.l} className="flex items-center justify-between gap-4 pb-4 border-b border-border last:border-0 last:pb-0">
+                  <div
+                    key={n.l}
+                    className="flex items-center justify-between gap-4 pb-4 border-b border-border last:border-0 last:pb-0"
+                  >
                     <div>
                       <div className="text-sm font-medium">{n.l}</div>
                       <div className="text-xs text-muted-foreground">{n.d}</div>

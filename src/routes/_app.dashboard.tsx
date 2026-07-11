@@ -59,10 +59,30 @@ const pieColors = ["#10B981", "#334155", "#F59E0B", "#3B82F6", "#EF4444"];
 
 const activity = [
   { agent: "Response Agent", event: "Answered refund query", time: "just now", tag: "resolved" },
-  { agent: "Retrieval Agent", event: "Reindexed shipping-policy.pdf", time: "2 min ago", tag: "info" },
-  { agent: "Decision Agent", event: "Escalated to human — high-value order", time: "8 min ago", tag: "warning" },
-  { agent: "Response Agent", event: "Sent follow-up to 34 conversations", time: "22 min ago", tag: "info" },
-  { agent: "Analysis Agent", event: "New complaint category detected: 'delivery time'", time: "1h ago", tag: "warning" },
+  {
+    agent: "Retrieval Agent",
+    event: "Reindexed shipping-policy.pdf",
+    time: "2 min ago",
+    tag: "info",
+  },
+  {
+    agent: "Decision Agent",
+    event: "Escalated to human — high-value order",
+    time: "8 min ago",
+    tag: "warning",
+  },
+  {
+    agent: "Response Agent",
+    event: "Sent follow-up to 34 conversations",
+    time: "22 min ago",
+    tag: "info",
+  },
+  {
+    agent: "Analysis Agent",
+    event: "New complaint category detected: 'delivery time'",
+    time: "1h ago",
+    tag: "warning",
+  },
 ];
 
 function Dashboard() {
@@ -81,10 +101,7 @@ function Dashboard() {
         {/* Stats */}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           {stats.map((s) => (
-            <div
-              key={s.label}
-              className="rounded-2xl border border-border bg-card p-5 shadow-card"
-            >
+            <div key={s.label} className="rounded-2xl border border-border bg-card p-5 shadow-card">
               <div className="flex items-center justify-between">
                 <div className="grid h-9 w-9 place-items-center rounded-lg bg-primary-soft text-primary">
                   <s.icon className="h-4 w-4" />
@@ -117,7 +134,9 @@ function Dashboard() {
                 <div className="text-sm font-semibold">Conversation volume</div>
                 <div className="text-xs text-muted-foreground">Last 14 days</div>
               </div>
-              <Badge variant="secondary" className="rounded-full">14d</Badge>
+              <Badge variant="secondary" className="rounded-full">
+                14d
+              </Badge>
             </div>
             <div className="h-72">
               <ResponsiveContainer width="100%" height="100%">
@@ -133,8 +152,19 @@ function Dashboard() {
                     </linearGradient>
                   </defs>
                   <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" vertical={false} />
-                  <XAxis dataKey="day" stroke="var(--muted-foreground)" fontSize={11} tickLine={false} axisLine={false} />
-                  <YAxis stroke="var(--muted-foreground)" fontSize={11} tickLine={false} axisLine={false} />
+                  <XAxis
+                    dataKey="day"
+                    stroke="var(--muted-foreground)"
+                    fontSize={11}
+                    tickLine={false}
+                    axisLine={false}
+                  />
+                  <YAxis
+                    stroke="var(--muted-foreground)"
+                    fontSize={11}
+                    tickLine={false}
+                    axisLine={false}
+                  />
                   <Tooltip
                     contentStyle={{
                       background: "var(--popover)",
@@ -143,8 +173,20 @@ function Dashboard() {
                       fontSize: 12,
                     }}
                   />
-                  <Area type="monotone" dataKey="Conversations" stroke="var(--chart-1)" strokeWidth={2} fill="url(#g1)" />
-                  <Area type="monotone" dataKey="Resolved" stroke="var(--chart-2)" strokeWidth={2} fill="url(#g2)" />
+                  <Area
+                    type="monotone"
+                    dataKey="Conversations"
+                    stroke="var(--chart-1)"
+                    strokeWidth={2}
+                    fill="url(#g1)"
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="Resolved"
+                    stroke="var(--chart-2)"
+                    strokeWidth={2}
+                    fill="url(#g2)"
+                  />
                 </AreaChart>
               </ResponsiveContainer>
             </div>
@@ -210,7 +252,9 @@ function Dashboard() {
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="text-sm font-medium truncate">{a.event}</div>
-                    <div className="text-xs text-muted-foreground">{a.agent} · {a.time}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {a.agent} · {a.time}
+                    </div>
                   </div>
                   <Badge
                     variant="secondary"
@@ -219,8 +263,8 @@ function Dashboard() {
                       (a.tag === "resolved"
                         ? "bg-success-soft text-success"
                         : a.tag === "warning"
-                        ? "bg-warning-soft text-warning-foreground"
-                        : "")
+                          ? "bg-warning-soft text-warning-foreground"
+                          : "")
                     }
                   >
                     {a.tag}

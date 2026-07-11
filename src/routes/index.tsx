@@ -39,10 +39,18 @@ function Landing() {
         <div className="mx-auto max-w-7xl px-6 lg:px-8 h-16 flex items-center justify-between gap-6">
           <Logo />
           <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
-            <a href="#features" className="hover:text-foreground transition-colors">Features</a>
-            <a href="#workflow" className="hover:text-foreground transition-colors">Workflow</a>
-            <a href="#pricing" className="hover:text-foreground transition-colors">Pricing</a>
-            <a href="#testimonials" className="hover:text-foreground transition-colors">Customers</a>
+            <a href="#features" className="hover:text-foreground transition-colors">
+              Features
+            </a>
+            <a href="#workflow" className="hover:text-foreground transition-colors">
+              Workflow
+            </a>
+            <a href="#pricing" className="hover:text-foreground transition-colors">
+              Pricing
+            </a>
+            <a href="#testimonials" className="hover:text-foreground transition-colors">
+              Customers
+            </a>
           </nav>
           <div className="flex items-center gap-2">
             <ThemeToggle />
@@ -64,7 +72,10 @@ function Landing() {
         <div className="absolute inset-0 bg-grid opacity-40 [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)] pointer-events-none" />
 
         <div className="relative mx-auto max-w-7xl px-6 lg:px-8 pt-20 pb-24 lg:pt-32 lg:pb-32 text-center">
-          <Badge variant="secondary" className="mb-6 rounded-full px-3 py-1 border border-border/60 bg-background/60 backdrop-blur">
+          <Badge
+            variant="secondary"
+            className="mb-6 rounded-full px-3 py-1 border border-border/60 bg-background/60 backdrop-blur"
+          >
             <Sparkles className="mr-1.5 h-3 w-3 text-primary" /> Now with multi-agent RAG
           </Badge>
           <h1 className="mx-auto max-w-4xl text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-tight leading-[1.05]">
@@ -73,8 +84,8 @@ function Landing() {
             Built for <span className="text-gradient-primary">Modern Businesses</span>
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-muted-foreground leading-relaxed">
-            Resolve tickets in seconds, not hours. SupportAI reads your docs, learns your
-            business rules, and answers customers on your website — with human-quality writing.
+            Resolve tickets in seconds, not hours. SupportAI reads your docs, learns your business
+            rules, and answers customers on your website — with human-quality writing.
           </p>
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <Button asChild size="lg" className="rounded-lg h-11 px-6">
@@ -97,7 +108,9 @@ function Landing() {
                 <div className="h-2.5 w-2.5 rounded-full bg-destructive/50" />
                 <div className="h-2.5 w-2.5 rounded-full bg-warning/60" />
                 <div className="h-2.5 w-2.5 rounded-full bg-success/60" />
-                <div className="ml-4 text-xs text-muted-foreground font-mono">app.supportai.io/dashboard</div>
+                <div className="ml-4 text-xs text-muted-foreground font-mono">
+                  app.supportai.io/dashboard
+                </div>
               </div>
               <div className="grid grid-cols-3 gap-4 p-6">
                 {[
@@ -208,7 +221,9 @@ function Landing() {
       <section id="workflow" className="border-y border-border/60 bg-muted/20">
         <div className="mx-auto max-w-7xl px-6 lg:px-8 py-24">
           <div className="text-center max-w-2xl mx-auto">
-            <div className="text-xs font-medium uppercase tracking-widest text-primary">How it works</div>
+            <div className="text-xs font-medium uppercase tracking-widest text-primary">
+              How it works
+            </div>
             <h2 className="mt-2 text-3xl sm:text-4xl font-semibold tracking-tight">
               A pipeline of specialized agents
             </h2>
@@ -271,7 +286,10 @@ function Landing() {
               role: "COO · Formal",
             },
           ].map((t) => (
-            <div key={t.name} className="rounded-2xl border border-border/70 bg-card p-6 shadow-card">
+            <div
+              key={t.name}
+              className="rounded-2xl border border-border/70 bg-card p-6 shadow-card"
+            >
               <div className="flex gap-0.5 text-warning">
                 {Array.from({ length: 5 }).map((_, i) => (
                   <Star key={i} className="h-4 w-4 fill-warning" />
@@ -291,11 +309,15 @@ function Landing() {
       <section id="pricing" className="border-t border-border/60 bg-muted/20">
         <div className="mx-auto max-w-7xl px-6 lg:px-8 py-24">
           <div className="text-center max-w-2xl mx-auto">
-            <div className="text-xs font-medium uppercase tracking-widest text-primary">Pricing</div>
+            <div className="text-xs font-medium uppercase tracking-widest text-primary">
+              Pricing
+            </div>
             <h2 className="mt-2 text-3xl sm:text-4xl font-semibold tracking-tight">
               Simple, usage-based pricing
             </h2>
-            <p className="mt-3 text-muted-foreground">Start free. Upgrade when your volume grows.</p>
+            <p className="mt-3 text-muted-foreground">
+              Start free. Upgrade when your volume grows.
+            </p>
           </div>
 
           <div className="mt-14 grid gap-6 md:grid-cols-3">
@@ -305,7 +327,12 @@ function Landing() {
                 price: "$0",
                 per: "forever",
                 desc: "For pilots & small teams",
-                features: ["500 AI resolutions/mo", "1 workspace", "Widget & API", "Community support"],
+                features: [
+                  "500 AI resolutions/mo",
+                  "1 workspace",
+                  "Widget & API",
+                  "Community support",
+                ],
                 cta: "Start free",
                 highlight: false,
               },
@@ -404,9 +431,15 @@ function Landing() {
             © {new Date().getFullYear()} SupportAI, Inc. All rights reserved.
           </p>
           <div className="flex items-center gap-6 text-xs text-muted-foreground">
-            <a href="#" className="hover:text-foreground">Privacy</a>
-            <a href="#" className="hover:text-foreground">Terms</a>
-            <a href="#" className="hover:text-foreground">Security</a>
+            <a href="#" className="hover:text-foreground">
+              Privacy
+            </a>
+            <a href="#" className="hover:text-foreground">
+              Terms
+            </a>
+            <a href="#" className="hover:text-foreground">
+              Security
+            </a>
           </div>
         </div>
       </footer>

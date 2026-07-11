@@ -66,7 +66,9 @@ function BusinessRules() {
                     <Switch defaultChecked={r.enabled} />
                   </div>
                   <p className="mt-1 text-xs text-muted-foreground">{r.desc}</p>
-                  <Button variant="link" size="sm" className="px-0 mt-2 h-auto text-xs">Edit conditions →</Button>
+                  <Button variant="link" size="sm" className="px-0 mt-2 h-auto text-xs">
+                    Edit conditions →
+                  </Button>
                 </div>
               </div>
             </div>
@@ -81,7 +83,9 @@ function BusinessRules() {
             </div>
             <div>
               <div className="font-semibold text-sm">Working hours</div>
-              <div className="text-xs text-muted-foreground">Set when human agents are available</div>
+              <div className="text-xs text-muted-foreground">
+                Set when human agents are available
+              </div>
             </div>
           </div>
           <div className="grid gap-4 sm:grid-cols-3">
@@ -99,12 +103,14 @@ function BusinessRules() {
             </div>
           </div>
           <div className="mt-4 flex flex-wrap gap-2">
-            {["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].map((d, i) => (
+            {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((d, i) => (
               <button
                 key={d}
                 className={
                   "h-9 px-3 rounded-lg text-xs font-medium border transition-colors " +
-                  (i < 5 ? "bg-primary text-primary-foreground border-primary" : "bg-card border-border text-muted-foreground")
+                  (i < 5
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "bg-card border-border text-muted-foreground")
                 }
               >
                 {d}
@@ -121,7 +127,9 @@ function BusinessRules() {
             </div>
             <div>
               <div className="font-semibold text-sm">Custom AI prompt</div>
-              <div className="text-xs text-muted-foreground">Shape tone, personality, and policy adherence</div>
+              <div className="text-xs text-muted-foreground">
+                Shape tone, personality, and policy adherence
+              </div>
             </div>
           </div>
           <Textarea
