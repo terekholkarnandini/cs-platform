@@ -39,7 +39,7 @@ const categories = [
   { name: "Other", value: 6 },
 ];
 
-const colors = ["oklch(0.55 0.22 275)", "oklch(0.65 0.17 155)", "oklch(0.72 0.17 55)", "oklch(0.65 0.2 340)", "oklch(0.6 0.15 220)"];
+const colors = ["#10B981", "#334155", "#F59E0B", "#3B82F6", "#EF4444"];
 
 const csat = Array.from({ length: 12 }, (_, i) => ({
   m: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"][i],

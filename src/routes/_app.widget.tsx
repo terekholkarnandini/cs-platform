@@ -21,12 +21,12 @@ export const Route = createFileRoute("/_app/widget")({
 });
 
 const swatches = [
-  "oklch(0.55 0.22 275)",
-  "oklch(0.6 0.2 220)",
-  "oklch(0.65 0.17 155)",
-  "oklch(0.6 0.24 27)",
-  "oklch(0.72 0.17 55)",
-  "oklch(0.25 0.02 265)",
+  "#10B981",
+  "#334155",
+  "#F59E0B",
+  "#3B82F6",
+  "#EF4444",
+  "#475569",
 ];
 
 function Widget() {
