@@ -58,7 +58,7 @@ function BusinessRules() {
             <div key={r.title} className="rounded-2xl border border-border bg-card p-5 shadow-card">
               <div className="flex items-start gap-4">
                 <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary-soft text-primary">
-                  <r.icon className="h-4.5 w-4.5" />
+                  <r.icon className="h-4 w-4" />
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-3">
@@ -77,7 +77,7 @@ function BusinessRules() {
         <div className="rounded-2xl border border-border bg-card p-6 shadow-card">
           <div className="flex items-center gap-3 mb-5">
             <div className="grid h-10 w-10 place-items-center rounded-xl bg-primary-soft text-primary">
-              <Clock className="h-4.5 w-4.5" />
+              <Clock className="h-4 w-4" />
             </div>
             <div>
               <div className="font-semibold text-sm">Working hours</div>
@@ -117,7 +117,7 @@ function BusinessRules() {
         <div className="rounded-2xl border border-border bg-card p-6 shadow-card">
           <div className="flex items-center gap-3 mb-5">
             <div className="grid h-10 w-10 place-items-center rounded-xl bg-primary-soft text-primary">
-              <Sparkles className="h-4.5 w-4.5" />
+              <Sparkles className="h-4 w-4" />
             </div>
             <div>
               <div className="font-semibold text-sm">Custom AI prompt</div>
