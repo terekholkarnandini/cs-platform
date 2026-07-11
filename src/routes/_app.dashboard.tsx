@@ -55,7 +55,7 @@ const pieData = [
   { name: "Other", value: 6 },
 ];
 
-const pieColors = ["oklch(0.55 0.22 275)", "oklch(0.65 0.17 155)", "oklch(0.72 0.17 55)", "oklch(0.65 0.2 340)", "oklch(0.6 0.15 220)"];
+const pieColors = ["#10B981", "#334155", "#F59E0B", "#3B82F6", "#EF4444"];
 
 const activity = [
   { agent: "Response Agent", event: "Answered refund query", time: "just now", tag: "resolved" },
