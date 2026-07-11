@@ -20,12 +20,48 @@ export const Route = createFileRoute("/_app/agents")({
 });
 
 const nodes = [
-  { icon: Brain, title: "Complaint Analysis", desc: "Detect intent, sentiment, urgency", model: "GPT-4o", color: "chart-1" },
-  { icon: User, title: "Customer Context", desc: "Fetch history, orders, tier", model: "Internal", color: "chart-5" },
-  { icon: Search, title: "Knowledge Retrieval", desc: "RAG search across sources", model: "Embed-3", color: "chart-2" },
-  { icon: Scale, title: "Decision Agent", desc: "Apply business rules", model: "Rules v4", color: "chart-3" },
-  { icon: MessageSquareText, title: "Response Agent", desc: "Draft human-quality reply", model: "GPT-4o", color: "chart-4" },
-  { icon: CircleCheck, title: "Follow-up Agent", desc: "Verify resolution + CSAT", model: "GPT-4o mini", color: "chart-1" },
+  {
+    icon: Brain,
+    title: "Complaint Analysis",
+    desc: "Detect intent, sentiment, urgency",
+    model: "GPT-4o",
+    color: "chart-1",
+  },
+  {
+    icon: User,
+    title: "Customer Context",
+    desc: "Fetch history, orders, tier",
+    model: "Internal",
+    color: "chart-5",
+  },
+  {
+    icon: Search,
+    title: "Knowledge Retrieval",
+    desc: "RAG search across sources",
+    model: "Embed-3",
+    color: "chart-2",
+  },
+  {
+    icon: Scale,
+    title: "Decision Agent",
+    desc: "Apply business rules",
+    model: "Rules v4",
+    color: "chart-3",
+  },
+  {
+    icon: MessageSquareText,
+    title: "Response Agent",
+    desc: "Draft human-quality reply",
+    model: "GPT-4o",
+    color: "chart-4",
+  },
+  {
+    icon: CircleCheck,
+    title: "Follow-up Agent",
+    desc: "Verify resolution + CSAT",
+    model: "GPT-4o mini",
+    color: "chart-1",
+  },
 ];
 
 function Agents() {

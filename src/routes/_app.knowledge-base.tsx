@@ -36,12 +36,42 @@ const sources = [
 ];
 
 const docs = [
-  { name: "product-manual-v3.pdf", type: "PDF", size: "2.4 MB", status: "Indexed", updated: "2h ago" },
-  { name: "warranty-terms-2024.pdf", type: "PDF", size: "812 KB", status: "Indexed", updated: "1d ago" },
+  {
+    name: "product-manual-v3.pdf",
+    type: "PDF",
+    size: "2.4 MB",
+    status: "Indexed",
+    updated: "2h ago",
+  },
+  {
+    name: "warranty-terms-2024.pdf",
+    type: "PDF",
+    size: "812 KB",
+    status: "Indexed",
+    updated: "1d ago",
+  },
   { name: "shipping-faq.docx", type: "DOCX", size: "156 KB", status: "Indexed", updated: "3d ago" },
-  { name: "product-catalog.csv", type: "CSV", size: "1.1 MB", status: "Processing", updated: "just now" },
-  { name: "help.acme.com", type: "Website", size: "428 pages", status: "Indexed", updated: "5d ago" },
-  { name: "return-policy-2024.pdf", type: "PDF", size: "342 KB", status: "Failed", updated: "1w ago" },
+  {
+    name: "product-catalog.csv",
+    type: "CSV",
+    size: "1.1 MB",
+    status: "Processing",
+    updated: "just now",
+  },
+  {
+    name: "help.acme.com",
+    type: "Website",
+    size: "428 pages",
+    status: "Indexed",
+    updated: "5d ago",
+  },
+  {
+    name: "return-policy-2024.pdf",
+    type: "PDF",
+    size: "342 KB",
+    status: "Failed",
+    updated: "1w ago",
+  },
 ];
 
 const statusStyle: Record<string, string> = {
@@ -89,8 +119,12 @@ function KnowledgeBase() {
             PDF, DOCX, CSV up to 50 MB · or paste a URL to crawl
           </div>
           <div className="mt-5 flex justify-center gap-2">
-            <Button className="rounded-lg" size="sm">Choose files</Button>
-            <Button variant="outline" className="rounded-lg" size="sm">Paste URL</Button>
+            <Button className="rounded-lg" size="sm">
+              Choose files
+            </Button>
+            <Button variant="outline" className="rounded-lg" size="sm">
+              Paste URL
+            </Button>
           </div>
         </div>
 
@@ -134,7 +168,11 @@ function KnowledgeBase() {
                       <Button size="icon" variant="ghost" className="h-8 w-8">
                         <RefreshCw className="h-3.5 w-3.5" />
                       </Button>
-                      <Button size="icon" variant="ghost" className="h-8 w-8 text-destructive hover:text-destructive">
+                      <Button
+                        size="icon"
+                        variant="ghost"
+                        className="h-8 w-8 text-destructive hover:text-destructive"
+                      >
                         <Trash2 className="h-3.5 w-3.5" />
                       </Button>
                       <Button size="icon" variant="ghost" className="h-8 w-8">

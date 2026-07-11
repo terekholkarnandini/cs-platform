@@ -20,14 +20,7 @@ export const Route = createFileRoute("/_app/widget")({
   head: () => ({ meta: [{ title: "Widget — SupportAI" }] }),
 });
 
-const swatches = [
-  "#10B981",
-  "#334155",
-  "#F59E0B",
-  "#3B82F6",
-  "#EF4444",
-  "#475569",
-];
+const swatches = ["#10B981", "#334155", "#F59E0B", "#3B82F6", "#EF4444", "#475569"];
 
 function Widget() {
   const [color, setColor] = useState(swatches[0]);
@@ -71,7 +64,9 @@ function Widget() {
             <div className="space-y-1.5">
               <Label>Position</Label>
               <Select defaultValue="br">
-                <SelectTrigger className="rounded-lg"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="rounded-lg">
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="br">Bottom right</SelectItem>
                   <SelectItem value="bl">Bottom left</SelectItem>
@@ -83,7 +78,9 @@ function Widget() {
             <div className="space-y-1.5">
               <Label>Theme</Label>
               <Select defaultValue="light">
-                <SelectTrigger className="rounded-lg"><SelectValue /></SelectTrigger>
+                <SelectTrigger className="rounded-lg">
+                  <SelectValue />
+                </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="light">Light</SelectItem>
                   <SelectItem value="dark">Dark</SelectItem>
@@ -115,17 +112,23 @@ function Widget() {
 
         {/* Preview */}
         <div className="rounded-2xl border border-border bg-muted/30 bg-grid p-6 lg:p-10 flex items-end justify-end min-h-[560px] relative">
-          <Badge className="absolute top-4 left-4 rounded-full" variant="secondary">Live preview</Badge>
+          <Badge className="absolute top-4 left-4 rounded-full" variant="secondary">
+            Live preview
+          </Badge>
 
           <div className="w-full max-w-sm rounded-2xl bg-card border border-border shadow-elegant overflow-hidden">
-            <div className="p-4 flex items-center gap-3" style={{ background: color, color: "white" }}>
+            <div
+              className="p-4 flex items-center gap-3"
+              style={{ background: color, color: "white" }}
+            >
               <div className="grid h-9 w-9 place-items-center rounded-full bg-white/20">
                 <MessageCircle className="h-4 w-4" />
               </div>
               <div className="min-w-0 flex-1">
                 <div className="font-semibold text-sm">Acme Support</div>
                 <div className="text-[11px] opacity-90 flex items-center gap-1.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-white" /> AI online · replies instantly
+                  <span className="h-1.5 w-1.5 rounded-full bg-white" /> AI online · replies
+                  instantly
                 </div>
               </div>
               <button className="opacity-80 hover:opacity-100">
@@ -141,7 +144,10 @@ function Widget() {
               </div>
             </div>
             <div className="p-3 border-t border-border flex items-center gap-2">
-              <Input placeholder="Type your message…" className="border-0 shadow-none focus-visible:ring-0 h-9" />
+              <Input
+                placeholder="Type your message…"
+                className="border-0 shadow-none focus-visible:ring-0 h-9"
+              />
               <Button size="icon" className="h-9 w-9 rounded-lg" style={{ background: color }}>
                 <Send className="h-4 w-4 text-white" />
               </Button>

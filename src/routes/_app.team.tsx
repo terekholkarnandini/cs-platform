@@ -12,9 +12,27 @@ export const Route = createFileRoute("/_app/team")({
 });
 
 const members = [
-  { name: "Emma Wilson", email: "emma@acme.com", role: "Owner", status: "Active", last: "just now" },
-  { name: "Marcus Chen", email: "marcus@acme.com", role: "Admin", status: "Active", last: "12m ago" },
-  { name: "Sarah Kim", email: "sarah@acme.com", role: "Support Lead", status: "Active", last: "2h ago" },
+  {
+    name: "Emma Wilson",
+    email: "emma@acme.com",
+    role: "Owner",
+    status: "Active",
+    last: "just now",
+  },
+  {
+    name: "Marcus Chen",
+    email: "marcus@acme.com",
+    role: "Admin",
+    status: "Active",
+    last: "12m ago",
+  },
+  {
+    name: "Sarah Kim",
+    email: "sarah@acme.com",
+    role: "Support Lead",
+    status: "Active",
+    last: "2h ago",
+  },
   { name: "David Park", email: "david@acme.com", role: "Agent", status: "Active", last: "1d ago" },
   { name: "Lisa Rodriguez", email: "lisa@acme.com", role: "Agent", status: "Invited", last: "—" },
 ];
@@ -61,14 +79,19 @@ function Team() {
               <li key={m.email} className="p-4 sm:px-5 flex items-center gap-4">
                 <Avatar className="h-9 w-9">
                   <AvatarFallback className="text-xs bg-muted">
-                    {m.name.split(" ").map((n) => n[0]).join("")}
+                    {m.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
                   </AvatarFallback>
                 </Avatar>
                 <div className="min-w-0 flex-1">
                   <div className="text-sm font-medium truncate">{m.name}</div>
                   <div className="text-xs text-muted-foreground truncate">{m.email}</div>
                 </div>
-                <Badge variant="secondary" className="rounded-full hidden sm:inline-flex">{m.role}</Badge>
+                <Badge variant="secondary" className="rounded-full hidden sm:inline-flex">
+                  {m.role}
+                </Badge>
                 <Badge
                   variant="secondary"
                   className={
@@ -80,7 +103,9 @@ function Team() {
                 >
                   {m.status}
                 </Badge>
-                <div className="text-xs text-muted-foreground hidden md:block w-20 text-right">{m.last}</div>
+                <div className="text-xs text-muted-foreground hidden md:block w-20 text-right">
+                  {m.last}
+                </div>
                 <Button size="icon" variant="ghost" className="h-8 w-8">
                   <MoreHorizontal className="h-4 w-4" />
                 </Button>

@@ -12,8 +12,20 @@ export const Route = createFileRoute("/_app/conversations")({
 });
 
 const list = [
-  { name: "Emma Wilson", subject: "Where is my order #A-2841?", time: "2m", tag: "AI", unread: true },
-  { name: "Marcus Chen", subject: "Refund for damaged product", time: "12m", tag: "Human", unread: true },
+  {
+    name: "Emma Wilson",
+    subject: "Where is my order #A-2841?",
+    time: "2m",
+    tag: "AI",
+    unread: true,
+  },
+  {
+    name: "Marcus Chen",
+    subject: "Refund for damaged product",
+    time: "12m",
+    tag: "Human",
+    unread: true,
+  },
   { name: "Sarah Kim", subject: "Warranty question — Model X", time: "34m", tag: "AI" },
   { name: "David Park", subject: "How do I cancel my subscription?", time: "1h", tag: "AI" },
   { name: "Lisa Rodriguez", subject: "Product available in blue?", time: "2h", tag: "AI" },
@@ -21,11 +33,27 @@ const list = [
 ];
 
 const messages = [
-  { role: "user", text: "Hi, my order #A-2841 was supposed to arrive yesterday. Where is it?", time: "10:24" },
-  { role: "ai", text: "Hi Emma — I'm sorry for the delay. Let me check your order right away.", time: "10:24" },
-  { role: "ai", text: "Order #A-2841 shipped on Oct 8 and is currently in transit. UPS shows it's out for delivery today by 6pm. Tracking: 1Z999AA10123456784.", time: "10:24" },
+  {
+    role: "user",
+    text: "Hi, my order #A-2841 was supposed to arrive yesterday. Where is it?",
+    time: "10:24",
+  },
+  {
+    role: "ai",
+    text: "Hi Emma — I'm sorry for the delay. Let me check your order right away.",
+    time: "10:24",
+  },
+  {
+    role: "ai",
+    text: "Order #A-2841 shipped on Oct 8 and is currently in transit. UPS shows it's out for delivery today by 6pm. Tracking: 1Z999AA10123456784.",
+    time: "10:24",
+  },
   { role: "user", text: "Great, thank you! Can I change the delivery address?", time: "10:26" },
-  { role: "ai", text: "Once a package is out for delivery, the address can't be changed from our side — but you can redirect it directly with UPS via UPS My Choice. Want me to send you the link?", time: "10:26" },
+  {
+    role: "ai",
+    text: "Once a package is out for delivery, the address can't be changed from our side — but you can redirect it directly with UPS via UPS My Choice. Want me to send you the link?",
+    time: "10:26",
+  },
 ];
 
 function Conversations() {
@@ -53,7 +81,10 @@ function Conversations() {
                 >
                   <Avatar className="h-9 w-9 shrink-0">
                     <AvatarFallback className="text-xs bg-muted">
-                      {c.name.split(" ").map((n) => n[0]).join("")}
+                      {c.name
+                        .split(" ")
+                        .map((n) => n[0])
+                        .join("")}
                     </AvatarFallback>
                   </Avatar>
                   <div className="min-w-0 flex-1">
@@ -135,7 +166,10 @@ function Conversations() {
                 <Button variant="ghost" size="icon" className="h-8 w-8">
                   <Paperclip className="h-4 w-4" />
                 </Button>
-                <Input placeholder="Type a reply, or press ⌘K for AI…" className="border-0 shadow-none focus-visible:ring-0" />
+                <Input
+                  placeholder="Type a reply, or press ⌘K for AI…"
+                  className="border-0 shadow-none focus-visible:ring-0"
+                />
                 <Button variant="ghost" size="icon" className="h-8 w-8 text-primary">
                   <Sparkles className="h-4 w-4" />
                 </Button>
