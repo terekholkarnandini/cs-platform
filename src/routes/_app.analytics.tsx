@@ -178,7 +178,7 @@ function Analytics() {
                 </div>
               ))}
               {["Mon","Tue","Wed","Thu","Fri","Sat","Sun"].map((day, di) => (
-                <>
+                <React.Fragment key={day}>
                   <div key={day} className="text-[10px] text-muted-foreground pr-2 flex items-center">{day}</div>
                   {Array.from({ length: 24 }).map((_, hi) => {
                     const intensity = Math.max(0, Math.sin((hi - 9) / 4) * 0.6 + (di < 5 ? 0.6 : 0.2) + Math.random() * 0.3);
