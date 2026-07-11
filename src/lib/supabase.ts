@@ -14,8 +14,8 @@ if (isPlaceholder && typeof window !== "undefined") {
 
 // Initialize Supabase Client
 export const supabase = createClient(
-  isPlaceholder ? "https://placeholder-project.supabase.co" : supabaseUrl,
-  isPlaceholder ? "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.placeholder" : supabaseAnonKey,
+  isPlaceholder ? "https://acwjpjdxelshigsfgbow.supabase.co" : supabaseUrl,
+  isPlaceholder ? "sb_publishable_SKWOEwhhPSt6A66DDqm5vQ_gvGkoKqR" : supabaseAnonKey,
   {
     auth: {
       persistSession: true,
