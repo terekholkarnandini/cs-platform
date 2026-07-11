@@ -190,7 +190,7 @@ function Analytics() {
                       />
                     );
                   })}
-                </>
+                </React.Fragment>
               ))}
             </div>
           </div>
