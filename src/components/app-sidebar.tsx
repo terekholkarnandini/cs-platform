@@ -1,4 +1,4 @@
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import {
   LayoutDashboard,
   Database,
@@ -15,6 +15,7 @@ import {
 import { Logo } from "@/components/logo";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/use-auth";
 
 const items = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
@@ -31,6 +32,26 @@ const items = [
 
 export function AppSidebar() {
   const pathname = useRouterState({ select: (r) => r.location.pathname });
+  const { user, signOut } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    const { error } = await signOut();
+    if (!error) {
+      navigate({ to: "/login" });
+    }
+  };
+
+  const fullName = user?.user_metadata?.full_name || "";
+  const companyName = user?.user_metadata?.company_name || "Workspace";
+  const initials = fullName
+    ? fullName
+        .split(" ")
+        .map((n: string) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2)
+    : user?.email?.substring(0, 2).toUpperCase() || "SA";
 
   return (
     <aside className="hidden lg:flex flex-col w-64 shrink-0 border-r border-sidebar-border bg-sidebar h-screen sticky top-0">
@@ -66,14 +87,20 @@ export function AppSidebar() {
         <div className="flex items-center gap-3 rounded-xl p-2 hover:bg-sidebar-accent/60 transition-colors">
           <Avatar className="h-9 w-9">
             <AvatarFallback className="bg-gradient-primary text-white text-xs font-medium">
-              AC
+              {initials}
             </AvatarFallback>
           </Avatar>
           <div className="min-w-0 flex-1">
-            <div className="text-sm font-medium truncate">Acme Inc.</div>
-            <div className="text-xs text-muted-foreground truncate">Pro plan</div>
+            <div className="text-sm font-medium truncate">{companyName}</div>
+            <div className="text-xs text-muted-foreground truncate">
+              {user?.email || "Pro plan"}
+            </div>
           </div>
-          <button className="text-muted-foreground hover:text-foreground p-1">
+          <button
+            onClick={handleSignOut}
+            className="text-muted-foreground hover:text-foreground p-1 transition-colors cursor-pointer"
+            title="Log out"
+          >
             <LogOut className="h-4 w-4" />
           </button>
         </div>

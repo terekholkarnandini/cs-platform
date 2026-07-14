@@ -9,6 +9,13 @@ lerna-debug.log*
 
 node_modules
 dist
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.production
+
 dist-ssr
 .output
 .vinxi

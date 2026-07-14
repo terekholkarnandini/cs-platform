@@ -13,8 +13,18 @@ export const Route = createFileRoute("/_app/api-keys")({
 });
 
 const keys = [
-  { name: "Production", key: "sk_live_4f9a3b2c8e7d5f1a9b3c", created: "Oct 8, 2025", used: "2 min ago" },
-  { name: "Development", key: "sk_test_2b8e7d5f1a9b3c4f9a", created: "Sep 22, 2025", used: "3h ago" },
+  {
+    name: "Production",
+    key: "sk_live_4f9a3b2c8e7d5f1a9b3c",
+    created: "Oct 8, 2025",
+    used: "2 min ago",
+  },
+  {
+    name: "Development",
+    key: "sk_test_2b8e7d5f1a9b3c4f9a",
+    created: "Sep 22, 2025",
+    used: "3h ago",
+  },
 ];
 
 function ApiKeys() {
@@ -44,20 +54,28 @@ function ApiKeys() {
           <div className="p-5 border-b border-border flex items-center justify-between">
             <div>
               <div className="text-sm font-semibold">API keys</div>
-              <div className="text-xs text-muted-foreground">Keep these secret — treat like passwords</div>
+              <div className="text-xs text-muted-foreground">
+                Keep these secret — treat like passwords
+              </div>
             </div>
-            <Button size="sm" className="rounded-lg">Generate new key</Button>
+            <Button size="sm" className="rounded-lg">
+              Generate new key
+            </Button>
           </div>
           <ul className="divide-y divide-border">
             {keys.map((k) => (
               <li key={k.key} className="p-5 flex flex-wrap items-center gap-4">
                 <div>
                   <div className="text-sm font-medium">{k.name}</div>
-                  <div className="text-xs text-muted-foreground">Created {k.created} · used {k.used}</div>
+                  <div className="text-xs text-muted-foreground">
+                    Created {k.created} · used {k.used}
+                  </div>
                 </div>
                 <div className="ml-auto flex items-center gap-2">
                   <code className="text-xs font-mono px-3 py-1.5 rounded-lg bg-muted border border-border">
-                    {reveal[k.key] ? k.key : k.key.replace(/./g, (c, i) => (i < 8 || i > k.key.length - 4 ? c : "•"))}
+                    {reveal[k.key]
+                      ? k.key
+                      : k.key.replace(/./g, (c, i) => (i < 8 || i > k.key.length - 4 ? c : "•"))}
                   </code>
                   <Button
                     size="icon"
@@ -65,7 +83,11 @@ function ApiKeys() {
                     className="h-8 w-8"
                     onClick={() => setReveal((r) => ({ ...r, [k.key]: !r[k.key] }))}
                   >
-                    {reveal[k.key] ? <EyeOff className="h-3.5 w-3.5" /> : <Eye className="h-3.5 w-3.5" />}
+                    {reveal[k.key] ? (
+                      <EyeOff className="h-3.5 w-3.5" />
+                    ) : (
+                      <Eye className="h-3.5 w-3.5" />
+                    )}
                   </Button>
                   <Button size="icon" variant="ghost" className="h-8 w-8">
                     <Copy className="h-3.5 w-3.5" />
@@ -88,16 +110,24 @@ function ApiKeys() {
           <div className="mt-4 grid gap-3 sm:grid-cols-[1fr_auto]">
             <div className="space-y-1.5">
               <Label htmlFor="hook">Webhook URL</Label>
-              <Input id="hook" defaultValue="https://api.acme.com/webhooks/supportai" className="h-10 rounded-lg font-mono text-sm" />
+              <Input
+                id="hook"
+                defaultValue="https://api.acme.com/webhooks/supportai"
+                className="h-10 rounded-lg font-mono text-sm"
+              />
             </div>
             <div className="flex items-end">
               <Button className="rounded-lg h-10">Save webhook</Button>
             </div>
           </div>
           <div className="mt-4 flex flex-wrap gap-2">
-            {["conversation.created", "message.sent", "conversation.resolved", "csat.received"].map((e) => (
-              <Badge key={e} variant="secondary" className="rounded-full font-mono text-[11px]">{e}</Badge>
-            ))}
+            {["conversation.created", "message.sent", "conversation.resolved", "csat.received"].map(
+              (e) => (
+                <Badge key={e} variant="secondary" className="rounded-full font-mono text-[11px]">
+                  {e}
+                </Badge>
+              ),
+            )}
           </div>
         </div>
 

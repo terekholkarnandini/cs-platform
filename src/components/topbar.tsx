@@ -18,9 +18,7 @@ export function Topbar({
       <div className="flex items-center gap-4 px-6 lg:px-8 h-16">
         <div className="min-w-0 flex-1">
           <h1 className="text-lg font-semibold tracking-tight truncate">{title}</h1>
-          {subtitle && (
-            <p className="text-xs text-muted-foreground truncate">{subtitle}</p>
-          )}
+          {subtitle && <p className="text-xs text-muted-foreground truncate">{subtitle}</p>}
         </div>
         <div className="hidden md:flex relative w-72">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
