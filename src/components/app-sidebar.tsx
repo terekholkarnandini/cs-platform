@@ -32,7 +32,7 @@ const items = [
 
 export function AppSidebar() {
   const pathname = useRouterState({ select: (r) => r.location.pathname });
-  const { user, signOut } = useAuth();
+  const { user, signOut, company } = useAuth();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -43,7 +43,7 @@ export function AppSidebar() {
   };
 
   const fullName = user?.user_metadata?.full_name || "";
-  const companyName = user?.user_metadata?.company_name || "Workspace";
+  const companyName = company?.name || user?.user_metadata?.company_name || "Workspace";
   const initials = fullName
     ? fullName
         .split(" ")
@@ -55,8 +55,21 @@ export function AppSidebar() {
 
   return (
     <aside className="hidden lg:flex flex-col w-64 shrink-0 border-r border-sidebar-border bg-sidebar h-screen sticky top-0">
-      <div className="h-16 px-5 flex items-center border-b border-sidebar-border">
-        <Logo />
+      <div className="h-16 px-5 flex items-center gap-3 border-b border-sidebar-border overflow-hidden">
+        {company?.logo_url ? (
+          <img
+            src={company.logo_url}
+            alt={companyName}
+            className="h-8 w-8 rounded-lg object-contain bg-white border border-border shrink-0"
+          />
+        ) : (
+          <Logo />
+        )}
+        {company?.logo_url && (
+          <span className="font-semibold text-sm tracking-tight truncate text-sidebar-foreground">
+            {companyName}
+          </span>
+        )}
       </div>
 
       <nav className="flex-1 overflow-y-auto px-3 py-4 space-y-0.5">

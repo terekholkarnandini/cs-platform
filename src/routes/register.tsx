@@ -71,11 +71,16 @@ function Register() {
   });
 
   // Redirect if already logged in
+  const { onboardingCompleted, isLoadingCompany } = useAuth();
   useEffect(() => {
-    if (!authLoading && user) {
-      navigate({ to: "/dashboard" });
+    if (!authLoading && !isLoadingCompany && user) {
+      if (onboardingCompleted) {
+        navigate({ to: "/dashboard" });
+      } else {
+        navigate({ to: "/onboarding" });
+      }
     }
-  }, [user, authLoading, navigate]);
+  }, [user, authLoading, isLoadingCompany, onboardingCompleted, navigate]);
 
   const onSubmit = async (data: FormData) => {
     setIsSubmitting(true);

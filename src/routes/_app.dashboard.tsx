@@ -14,7 +14,10 @@ import {
   Upload,
   Workflow,
   Sparkles,
+  KeyRound,
 } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
+import { Link } from "@tanstack/react-router";
 import {
   Area,
   AreaChart,
@@ -33,13 +36,8 @@ export const Route = createFileRoute("/_app/dashboard")({
   head: () => ({ meta: [{ title: "Dashboard — SupportAI" }] }),
 });
 
-const stats = [
-  { label: "Total conversations", value: "12,847", trend: "+18.2%", up: true, icon: MessageSquare },
-  { label: "Resolved by AI", value: "94.2%", trend: "+3.1%", up: true, icon: Bot },
-  { label: "Open tickets", value: "128", trend: "-12%", up: true, icon: Ticket },
-  { label: "Avg. response time", value: "1.4s", trend: "-32%", up: true, icon: Clock },
-  { label: "CSAT score", value: "4.8/5", trend: "+0.3", up: true, icon: Smile },
-];
+// Real-time stats are resolved dynamically inside the component from the companies database table.
+
 
 const trendData = Array.from({ length: 14 }, (_, i) => ({
   day: `D${i + 1}`,
@@ -86,6 +84,69 @@ const activity = [
 ];
 
 function Dashboard() {
+  const { company } = useAuth();
+
+  const stats = [
+    {
+      label: "Total conversations",
+      value: company ? company.total_conversations.toLocaleString() : "12,847",
+      trend: "+18.2%",
+      up: true,
+      icon: MessageSquare,
+    },
+    {
+      label: "Resolved by AI",
+      value: company ? `${Number(company.resolved_by_ai).toFixed(1)}%` : "94.2%",
+      trend: "+3.1%",
+      up: true,
+      icon: Bot,
+    },
+    {
+      label: "Open tickets",
+      value: company ? company.open_tickets.toLocaleString() : "128",
+      trend: "-12%",
+      up: true,
+      icon: Ticket,
+    },
+    {
+      label: "Avg. response time",
+      value: company ? `${Number(company.avg_response_time).toFixed(1)}s` : "1.4s",
+      trend: "-32%",
+      up: true,
+      icon: Clock,
+    },
+    {
+      label: "CSAT score",
+      value: company ? `${Number(company.csat_score).toFixed(1)}/5` : "4.8/5",
+      trend: "+0.3",
+      up: true,
+      icon: Smile,
+    },
+  ];
+
+  const quickActions = [
+    { icon: Upload, title: "Upload documents", desc: "Feed your knowledge base", url: "/knowledge-base" },
+    { icon: Workflow, title: "Configure agents", desc: "Edit workflow pipeline", url: "/agents" },
+  ];
+
+  if (!company || company.integration_type === "Widget" || company.integration_type === "Both") {
+    quickActions.push({
+      icon: Sparkles,
+      title: "Install widget",
+      desc: "Copy embed code",
+      url: "/widget",
+    });
+  }
+
+  if (!company || company.integration_type === "API" || company.integration_type === "Both") {
+    quickActions.push({
+      icon: KeyRound,
+      title: "API Keys",
+      desc: "Manage developer keys",
+      url: "/api-keys",
+    });
+  }
+
   return (
     <>
       <Topbar
@@ -278,13 +339,10 @@ function Dashboard() {
             <div className="text-sm font-semibold">Quick actions</div>
             <div className="text-xs text-muted-foreground">Get set up in minutes</div>
             <div className="mt-4 space-y-3">
-              {[
-                { icon: Upload, title: "Upload documents", desc: "Feed your knowledge base" },
-                { icon: Workflow, title: "Configure agents", desc: "Edit workflow pipeline" },
-                { icon: Sparkles, title: "Install widget", desc: "Copy embed code" },
-              ].map((q) => (
-                <button
+              {quickActions.map((q) => (
+                <Link
                   key={q.title}
+                  to={q.url}
                   className="w-full flex items-center gap-3 rounded-xl border border-border p-3 text-left hover:bg-muted/50 transition-colors"
                 >
                   <div className="grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-primary text-primary-foreground">
@@ -295,7 +353,7 @@ function Dashboard() {
                     <div className="text-xs text-muted-foreground">{q.desc}</div>
                   </div>
                   <ArrowUpRight className="h-4 w-4 text-muted-foreground" />
-                </button>
+                </Link>
               ))}
             </div>
           </div>
