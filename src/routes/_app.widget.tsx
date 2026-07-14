@@ -13,7 +13,9 @@ import {
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
 import { Copy, MessageCircle, X, Send } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useAuth } from "@/hooks/use-auth";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/_app/widget")({
   component: Widget,
@@ -23,8 +25,30 @@ export const Route = createFileRoute("/_app/widget")({
 const swatches = ["#10B981", "#334155", "#F59E0B", "#3B82F6", "#EF4444", "#475569"];
 
 function Widget() {
+  const { company } = useAuth();
   const [color, setColor] = useState(swatches[0]);
   const [greeting, setGreeting] = useState("Hi there! 👋 How can I help you today?");
+  const [logoUrl, setLogoUrl] = useState("");
+
+  useEffect(() => {
+    if (company?.logo_url) {
+      setLogoUrl(company.logo_url);
+    }
+  }, [company]);
+
+  const companyName = company?.name || "Acme";
+  const workspaceSlug = company?.name
+    ? company.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")
+    : "acme-inc";
+
+  const embedCode = `<script src="https://cdn.supportai.io/w.js"
+  data-workspace="${workspaceSlug}"
+  defer></script>`;
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(embedCode);
+    toast.success("Embed code copied to clipboard!");
+  };
 
   return (
     <>
@@ -39,10 +63,9 @@ function Widget() {
                 <button
                   key={c}
                   onClick={() => setColor(c)}
-                  className={
-                    "h-9 w-9 rounded-lg border-2 transition-all " +
-                    (color === c ? "border-foreground scale-110" : "border-transparent")
-                  }
+                  className={`h-9 w-9 rounded-lg border-2 transition-all ${
+                    color === c ? "border-foreground scale-110" : "border-transparent"
+                  }`}
                   style={{ background: c }}
                   aria-label={c}
                 />
@@ -92,22 +115,32 @@ function Widget() {
 
           <div className="space-y-1.5">
             <Label htmlFor="logo">Brand logo URL</Label>
-            <Input id="logo" placeholder="https://…" className="rounded-lg" />
+            <Input
+              id="logo"
+              placeholder="https://…"
+              value={logoUrl}
+              onChange={(e) => setLogoUrl(e.target.value)}
+              className="rounded-lg"
+            />
           </div>
 
           <div className="pt-2">
             <Label>Embed code</Label>
             <div className="mt-2 rounded-xl bg-muted border border-border p-3 font-mono text-[11px] leading-relaxed relative">
-              <Button size="icon" variant="ghost" className="absolute top-1.5 right-1.5 h-7 w-7">
+              <Button
+                size="icon"
+                variant="ghost"
+                onClick={copyToClipboard}
+                className="absolute top-1.5 right-1.5 h-7 w-7 cursor-pointer"
+                title="Copy embed code"
+              >
                 <Copy className="h-3.5 w-3.5" />
               </Button>
-              <pre className="whitespace-pre-wrap pr-8">{`<script src="https://cdn.supportai.io/w.js"
-  data-workspace="acme-inc"
-  defer></script>`}</pre>
+              <pre className="whitespace-pre-wrap pr-8">{embedCode}</pre>
             </div>
           </div>
 
-          <Button className="w-full rounded-lg">Save changes</Button>
+          <Button className="w-full rounded-lg bg-primary">Save changes</Button>
         </div>
 
         {/* Preview */}
@@ -121,17 +154,21 @@ function Widget() {
               className="p-4 flex items-center gap-3"
               style={{ background: color, color: "white" }}
             >
-              <div className="grid h-9 w-9 place-items-center rounded-full bg-white/20">
-                <MessageCircle className="h-4 w-4" />
+              <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-white/20 overflow-hidden">
+                {logoUrl ? (
+                  <img src={logoUrl} alt="Logo" className="h-full w-full object-cover" />
+                ) : (
+                  <MessageCircle className="h-4 w-4" />
+                )}
               </div>
               <div className="min-w-0 flex-1">
-                <div className="font-semibold text-sm">Acme Support</div>
+                <div className="font-semibold text-sm truncate">{companyName} Support</div>
                 <div className="text-[11px] opacity-90 flex items-center gap-1.5">
-                  <span className="h-1.5 w-1.5 rounded-full bg-white" /> AI online · replies
+                  <span className="h-1.5 w-1.5 rounded-full bg-white animate-pulse" /> AI online · replies
                   instantly
                 </div>
               </div>
-              <button className="opacity-80 hover:opacity-100">
+              <button className="opacity-80 hover:opacity-100 cursor-pointer">
                 <X className="h-4 w-4" />
               </button>
             </div>
@@ -158,3 +195,4 @@ function Widget() {
     </>
   );
 }
+

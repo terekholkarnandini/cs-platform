@@ -73,12 +73,17 @@ function Login() {
   });
 
   // Redirect if already logged in
+  const { onboardingCompleted, isLoadingCompany } = useAuth();
   useEffect(() => {
-    if (!authLoading && user) {
-      const destination = search.redirect || "/dashboard";
-      navigate({ to: destination });
+    if (!authLoading && !isLoadingCompany && user) {
+      if (onboardingCompleted) {
+        const destination = search.redirect === "/onboarding" ? "/dashboard" : (search.redirect || "/dashboard");
+        navigate({ to: destination });
+      } else {
+        navigate({ to: "/onboarding" });
+      }
     }
-  }, [user, authLoading, navigate, search.redirect]);
+  }, [user, authLoading, isLoadingCompany, onboardingCompleted, navigate, search.redirect]);
 
   // Load saved email if rememberMe was previously set
   useEffect(() => {
