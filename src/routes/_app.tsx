@@ -8,20 +8,24 @@ export const Route = createFileRoute("/_app")({
 });
 
 function AppLayout() {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, onboardingCompleted, isLoadingCompany } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isLoading && !user) {
-      const redirect = typeof window !== "undefined" ? window.location.pathname : "/dashboard";
-      navigate({
-        to: "/login",
-        search: { redirect },
-      });
+    if (!isLoading && !isLoadingCompany) {
+      if (!user) {
+        const redirect = typeof window !== "undefined" ? window.location.pathname : "/dashboard";
+        navigate({
+          to: "/login",
+          search: { redirect },
+        });
+      } else if (!onboardingCompleted) {
+        navigate({ to: "/onboarding" });
+      }
     }
-  }, [user, isLoading, navigate]);
+  }, [user, isLoading, isLoadingCompany, onboardingCompleted, navigate]);
 
-  if (isLoading) {
+  if (isLoading || isLoadingCompany) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
