@@ -23,7 +23,8 @@ function AppLayout() {
         navigate({ to: "/onboarding" });
       }
     }
-  }, [user, isLoading, isLoadingCompany, onboardingCompleted, navigate]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, isLoading, isLoadingCompany, onboardingCompleted]);
 
   if (isLoading || isLoadingCompany) {
     return (

@@ -1,10 +1,15 @@
-from fastapi import APIRouter, UploadFile, File, HTTPException
+from fastapi import APIRouter, UploadFile, File, Form
+from typing import List
+from datetime import datetime
+import uuid
 import os
 import shutil
+import json
 from knowledge.extractor import extract_text
 from knowledge.chunker import chunk_text
 from knowledge.embeddings import generate_embeddings
 from knowledge.vector_store import store_chunks
+
 router = APIRouter()
 
 UPLOAD_DIR = "uploads"
@@ -14,36 +19,71 @@ ALLOWED_EXTENSIONS = [".pdf", ".docx", ".csv"]
 
 
 @router.post("/upload")
-async def upload_document(file: UploadFile = File(...)):
-    ext = os.path.splitext(file.filename)[1].lower()
+async def upload_documents(
+    files: List[UploadFile] = File(...),
+    company_id: str = Form(...),
+):
 
-    if ext not in ALLOWED_EXTENSIONS:
-        raise HTTPException(
-            status_code=400,
-            detail="Only PDF, DOCX and CSV files are allowed."
+    uploaded_files = []
+    skipped_files = []
+
+    for file in files:
+
+        ext = os.path.splitext(file.filename)[1].lower()
+
+        if ext not in ALLOWED_EXTENSIONS:
+            skipped_files.append(file.filename)
+            continue
+
+        file_path = os.path.join(UPLOAD_DIR, file.filename)
+
+        with open(file_path, "wb") as buffer:
+            shutil.copyfileobj(file.file, buffer)
+
+        # Extract text
+        text = extract_text(file_path)
+
+        # Chunk text
+        chunks = chunk_text(text)
+
+        # Generate embeddings
+        embeddings = generate_embeddings(chunks)
+
+        # Store in company-specific ChromaDB collection
+        store_chunks(
+            chunks,
+            embeddings,
+            file.filename,
+            company_id,
         )
 
-    file_path = os.path.join(UPLOAD_DIR, file.filename)
-
-    with open(file_path, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+        uploaded_files.append({
+            "id": str(uuid.uuid4()),
+            "company_id": company_id,
+            "filename": file.filename,
+            "type": ext.replace(".", "").upper(),
+            "chunks": len(chunks),
+            "status": "Indexed",
+            "uploaded_at": datetime.now().isoformat()
+        })
     
-    text = extract_text(file_path)
-    chunks = chunk_text(text)
+    DATA_FILE = "data/documents.json"
 
-    embeddings = generate_embeddings(chunks)
+    os.makedirs("data", exist_ok=True)
 
-    store_chunks(
-    chunks,
-    embeddings,
-    file.filename
-    )
+    if os.path.exists(DATA_FILE):
+        with open(DATA_FILE, "r") as f:
+            documents = json.load(f)
+    else:
+        documents = []
+
+    documents.extend(uploaded_files)
+
+    with open(DATA_FILE, "w") as f:
+        json.dump(documents, f, indent=4)
 
     return {
-    "message": "Knowledge uploaded successfully",
-    "filename": file.filename,
-    "chunks": len(chunks),
-    "status": "Stored in ChromaDB"
-}
-
-    
+        "message": "Knowledge upload completed",
+        "uploaded_files": uploaded_files,
+        "skipped_files": skipped_files
+    }
