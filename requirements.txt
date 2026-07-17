@@ -1,0 +1,113 @@
+# ===========================
+# FastAPI Framework
+# ===========================
+fastapi
+uvicorn[standard]
+python-multipart
+
+# ===========================
+# Authentication & Security
+# ===========================
+python-jose[cryptography]
+passlib[bcrypt]
+bcrypt
+
+# ===========================
+# Environment Variables
+# ===========================
+python-dotenv
+
+# ===========================
+# HTTP Requests
+# ===========================
+requests
+httpx
+
+# ===========================
+# Google Gemini
+# ===========================
+google-generativeai
+
+# ===========================
+# Vector Database
+# ===========================
+chromadb
+
+# ===========================
+# Embeddings & NLP
+# ===========================
+sentence-transformers
+numpy
+scikit-learn
+
+# ===========================
+# PDF Processing
+# ===========================
+pdfplumber
+PyPDF2
+pymupdf
+
+# ===========================
+# DOCX Processing
+# ===========================
+python-docx
+
+# ===========================
+# CSV Processing
+# ===========================
+pandas
+openpyxl
+
+# ===========================
+# OCR (Optional)
+# ===========================
+pytesseract
+Pillow
+
+# ===========================
+# Website Crawling
+# ===========================
+beautifulsoup4
+lxml
+crawl4ai
+
+# ===========================
+# HTML Parsing
+# ===========================
+html5lib
+
+# ===========================
+# Supabase
+# ===========================
+supabase
+
+# ===========================
+# File Utilities
+# ===========================
+aiofiles
+
+# ===========================
+# Data Validation
+# ===========================
+pydantic
+email-validator
+
+# ===========================
+# Logging & Utilities
+# ===========================
+tqdm
+
+# ===========================
+# Optional AI Utilities
+# ===========================
+tiktoken
+
+# ===========================
+# JSON Handling
+# ===========================
+orjson
+
+# ===========================
+# Date Utilities
+# ===========================
+python-dateutil
