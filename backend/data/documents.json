@@ -114,5 +114,14 @@
         "chunks": 9,
         "status": "Indexed",
         "uploaded_at": "2026-07-17T12:37:46.627065"
+    },
+    {
+        "id": "2a1f73d5-660b-4bdc-b6b5-b35fb6c135e3",
+        "company_id": "6deca382-e4db-4b42-a7fb-2946ead8d172",
+        "filename": "SupportAI_Module_Wise_Document.pdf",
+        "type": "PDF",
+        "chunks": 4,
+        "status": "Indexed",
+        "uploaded_at": "2026-07-17T16:05:23.962475"
     }
 ]
