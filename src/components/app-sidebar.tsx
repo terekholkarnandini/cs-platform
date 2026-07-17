@@ -11,6 +11,7 @@ import {
   Settings as SettingsIcon,
   Scale,
   LogOut,
+  Sliders,
 } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -23,6 +24,7 @@ const items = [
   { title: "AI Agents", url: "/agents", icon: Workflow },
   { title: "Conversations", url: "/conversations", icon: MessageSquare },
   { title: "Business Rules", url: "/business-rules", icon: Scale },
+  { title: "AI Configuration", url: "/ai-configuration", icon: Sliders },
   { title: "Analytics", url: "/analytics", icon: BarChart3 },
   { title: "API Keys", url: "/api-keys", icon: KeyRound },
   { title: "Widget", url: "/widget", icon: Code2 },
