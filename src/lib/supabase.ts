@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { Database } from "./database.types";
 
 // Retrieve environment variables. Fallback to placeholder values so the app doesn't crash on initial load.
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || "";
@@ -13,7 +14,7 @@ if (isPlaceholder && typeof window !== "undefined") {
 }
 
 // Initialize Supabase Client
-export const supabase = createClient(
+export const supabase = createClient<Database>(
   isPlaceholder ? "https://acwjpjdxelshigsfgbow.supabase.co" : supabaseUrl,
   isPlaceholder ? "sb_publishable_SKWOEwhhPSt6A66DDqm5vQ_gvGkoKqR" : supabaseAnonKey,
   {
