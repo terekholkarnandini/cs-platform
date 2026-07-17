@@ -12,6 +12,7 @@ import {
   RefreshCw,
   MoreHorizontal,
   Search,
+  Loader2,
 } from "lucide-react";
 import {
   Table,
@@ -22,11 +23,22 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Input } from "@/components/ui/input";
+import { useEffect, useRef, useState, useCallback, DragEvent } from "react";
+import { toast } from "sonner";
+import {
+  getDocuments,
+  uploadDocuments,
+  type KnowledgeDocument,
+} from "@/services/knowledgeApi";
+import { useAuth } from "@/hooks/use-auth";
 
 export const Route = createFileRoute("/_app/knowledge-base")({
   component: KnowledgeBase,
   head: () => ({ meta: [{ title: "Knowledge Base — SupportAI" }] }),
 });
+
+const ACCEPTED = ".pdf,.docx,.csv";
+const ACCEPTED_TYPES = ["application/pdf", "text/csv", "application/vnd.openxmlformats-officedocument.wordprocessingml.document"];
 
 const sources = [
   { icon: FileText, label: "PDF", desc: "Upload manuals & docs" },
@@ -35,52 +47,129 @@ const sources = [
   { icon: FileType, label: "DOCX", desc: "Word documents" },
 ];
 
-const docs = [
-  {
-    name: "product-manual-v3.pdf",
-    type: "PDF",
-    size: "2.4 MB",
-    status: "Indexed",
-    updated: "2h ago",
-  },
-  {
-    name: "warranty-terms-2024.pdf",
-    type: "PDF",
-    size: "812 KB",
-    status: "Indexed",
-    updated: "1d ago",
-  },
-  { name: "shipping-faq.docx", type: "DOCX", size: "156 KB", status: "Indexed", updated: "3d ago" },
-  {
-    name: "product-catalog.csv",
-    type: "CSV",
-    size: "1.1 MB",
-    status: "Processing",
-    updated: "just now",
-  },
-  {
-    name: "help.acme.com",
-    type: "Website",
-    size: "428 pages",
-    status: "Indexed",
-    updated: "5d ago",
-  },
-  {
-    name: "return-policy-2024.pdf",
-    type: "PDF",
-    size: "342 KB",
-    status: "Failed",
-    updated: "1w ago",
-  },
-];
-
 const statusStyle: Record<string, string> = {
   Indexed: "bg-success-soft text-success",
   Processing: "bg-warning-soft text-warning-foreground",
   Failed: "bg-destructive/10 text-destructive",
 };
 
+function timeAgo(isoString: string): string {
+  const now = Date.now();
+  const then = new Date(isoString).getTime();
+  const diffMs = now - then;
+  const diffSec = Math.floor(diffMs / 1000);
+  const diffMin = Math.floor(diffSec / 60);
+  const diffHr = Math.floor(diffMin / 60);
+  const diffDay = Math.floor(diffHr / 24);
+  if (diffSec < 60) return "Just now";
+  if (diffMin < 60) return `${diffMin} minute${diffMin !== 1 ? "s" : ""} ago`;
+  if (diffHr < 24) return `${diffHr} hour${diffHr !== 1 ? "s" : ""} ago`;
+  if (diffDay === 1) return "Yesterday";
+  if (diffDay < 7) return `${diffDay} days ago`;
+  return `${Math.floor(diffDay / 7)} week${Math.floor(diffDay / 7) !== 1 ? "s" : ""} ago`;
+}
+
 function KnowledgeBase() {
+  const { company } = useAuth();
+  const [docs, setDocs] = useState<KnowledgeDocument[]>([]);
+  const [isUploading, setIsUploading] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const fetchDocs = useCallback(async () => {
+    if (!company?.id) return;
+    try {
+      const data = await getDocuments(company.id);
+      setDocs(data);
+    } catch {
+      toast.error("Failed to load documents. Is the backend running?");
+    }
+  }, [company?.id]);
+
+  useEffect(() => {
+    fetchDocs();
+  }, [fetchDocs]);
+
+  const handleUpload = useCallback(
+    async (files: FileList | File[]) => {
+      const fileArray = Array.from(files);
+
+      // Filter by type
+      const valid = fileArray.filter((f) => {
+        const ext = f.name.split(".").pop()?.toLowerCase();
+        return ["pdf", "docx", "csv"].includes(ext ?? "");
+      });
+      const invalid = fileArray.filter((f) => {
+        const ext = f.name.split(".").pop()?.toLowerCase();
+        return !["pdf", "docx", "csv"].includes(ext ?? "");
+      });
+
+      if (invalid.length > 0) {
+        toast.warning(
+          `Unsupported file type: ${invalid.map((f) => f.name).join(", ")}. Only PDF, DOCX and CSV are supported.`
+        );
+      }
+
+      if (valid.length === 0) return;
+
+      setIsUploading(true);
+      try {
+        if (!company?.id) {
+          toast.error("Company not found. Please reload and try again.");
+          return;
+        }
+        const result = await uploadDocuments(valid, company.id);
+        if (result.uploaded_files.length > 0) {
+          toast.success(
+            `Successfully uploaded ${result.uploaded_files.length} file${result.uploaded_files.length !== 1 ? "s" : ""}.`
+          );
+        }
+        if (result.skipped_files.length > 0) {
+          toast.warning(`Skipped unsupported files: ${result.skipped_files.join(", ")}`);
+        }
+        await fetchDocs();
+      } catch {
+        toast.error("Upload failed. Please check your connection and try again.");
+      } finally {
+        setIsUploading(false);
+        if (fileInputRef.current) fileInputRef.current.value = "";
+      }
+    },
+    [fetchDocs]
+  );
+
+  const onFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
+      handleUpload(e.target.files);
+    }
+  };
+
+  const onDragOver = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const onDragLeave = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const onDrop = (e: DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    setIsDragging(false);
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      handleUpload(e.dataTransfer.files);
+    }
+  };
+
+  const handleSourceCardClick = (label: string) => {
+    if (label === "Website") {
+      toast.info("Website crawling will be available soon.");
+      return;
+    }
+    if (!isUploading) fileInputRef.current?.click();
+  };
+
   return (
     <>
       <Topbar
@@ -93,12 +182,24 @@ function KnowledgeBase() {
         }
       />
       <div className="p-6 lg:p-8 space-y-6">
+        {/* Hidden file input */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept={ACCEPTED}
+          multiple
+          className="hidden"
+          onChange={onFileInputChange}
+        />
+
         {/* Source cards */}
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {sources.map((s) => (
             <button
               key={s.label}
-              className="group text-left rounded-2xl border border-border bg-card p-5 shadow-card hover:border-primary/40 hover:shadow-elegant transition-all"
+              onClick={() => handleSourceCardClick(s.label)}
+              disabled={isUploading && s.label !== "Website"}
+              className="group text-left rounded-2xl border border-border bg-card p-5 shadow-card hover:border-primary/40 hover:shadow-elegant transition-all disabled:opacity-60 disabled:cursor-not-allowed"
             >
               <div className="grid h-10 w-10 place-items-center rounded-xl bg-primary-soft text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
                 <s.icon className="h-5 w-5" />
@@ -110,19 +211,50 @@ function KnowledgeBase() {
         </div>
 
         {/* Drop zone */}
-        <div className="rounded-2xl border-2 border-dashed border-border bg-muted/20 p-10 text-center">
+        <div
+          className={`rounded-2xl border-2 border-dashed bg-muted/20 p-10 text-center transition-colors ${
+            isDragging ? "border-primary bg-primary/5" : "border-border"
+          }`}
+          onDragOver={onDragOver}
+          onDragLeave={onDragLeave}
+          onDrop={onDrop}
+        >
           <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-primary-soft text-primary">
-            <UploadCloud className="h-6 w-6" />
+            {isUploading ? (
+              <Loader2 className="h-6 w-6 animate-spin" />
+            ) : (
+              <UploadCloud className="h-6 w-6" />
+            )}
           </div>
-          <div className="mt-4 font-semibold">Drop files to upload</div>
+          <div className="mt-4 font-semibold">
+            {isUploading ? "Uploading…" : "Drop files to upload"}
+          </div>
           <div className="mt-1 text-sm text-muted-foreground">
             PDF, DOCX, CSV up to 50 MB · or paste a URL to crawl
           </div>
           <div className="mt-5 flex justify-center gap-2">
-            <Button className="rounded-lg" size="sm">
-              Choose files
+            <Button
+              className="rounded-lg"
+              size="sm"
+              disabled={isUploading}
+              onClick={() => fileInputRef.current?.click()}
+            >
+              {isUploading ? (
+                <>
+                  <Loader2 className="h-3.5 w-3.5 mr-1.5 animate-spin" />
+                  Uploading…
+                </>
+              ) : (
+                "Choose files"
+              )}
             </Button>
-            <Button variant="outline" className="rounded-lg" size="sm">
+            <Button
+              variant="outline"
+              className="rounded-lg"
+              size="sm"
+              disabled
+              onClick={() => toast.info("Website crawling will be available soon.")}
+            >
               Paste URL
             </Button>
           </div>
@@ -145,43 +277,54 @@ function KnowledgeBase() {
               <TableRow className="hover:bg-transparent">
                 <TableHead>Name</TableHead>
                 <TableHead>Type</TableHead>
-                <TableHead>Size</TableHead>
+                <TableHead>Chunks</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Updated</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {docs.map((d) => (
-                <TableRow key={d.name}>
-                  <TableCell className="font-medium">{d.name}</TableCell>
-                  <TableCell className="text-muted-foreground">{d.type}</TableCell>
-                  <TableCell className="text-muted-foreground">{d.size}</TableCell>
-                  <TableCell>
-                    <Badge className={"rounded-full " + statusStyle[d.status]} variant="secondary">
-                      {d.status}
-                    </Badge>
-                  </TableCell>
-                  <TableCell className="text-muted-foreground">{d.updated}</TableCell>
-                  <TableCell className="text-right">
-                    <div className="flex justify-end gap-1">
-                      <Button size="icon" variant="ghost" className="h-8 w-8">
-                        <RefreshCw className="h-3.5 w-3.5" />
-                      </Button>
-                      <Button
-                        size="icon"
-                        variant="ghost"
-                        className="h-8 w-8 text-destructive hover:text-destructive"
-                      >
-                        <Trash2 className="h-3.5 w-3.5" />
-                      </Button>
-                      <Button size="icon" variant="ghost" className="h-8 w-8">
-                        <MoreHorizontal className="h-3.5 w-3.5" />
-                      </Button>
-                    </div>
+              {docs.length === 0 ? (
+                <TableRow>
+                  <TableCell colSpan={6} className="text-center text-muted-foreground py-10 text-sm">
+                    No documents uploaded yet.
                   </TableCell>
                 </TableRow>
-              ))}
+              ) : (
+                docs.map((d) => (
+                  <TableRow key={d.id}>
+                    <TableCell className="font-medium">{d.filename}</TableCell>
+                    <TableCell className="text-muted-foreground">{d.type}</TableCell>
+                    <TableCell className="text-muted-foreground">{d.chunks}</TableCell>
+                    <TableCell>
+                      <Badge
+                        className={"rounded-full " + (statusStyle[d.status] ?? "bg-muted text-muted-foreground")}
+                        variant="secondary"
+                      >
+                        {d.status}
+                      </Badge>
+                    </TableCell>
+                    <TableCell className="text-muted-foreground">{timeAgo(d.uploaded_at)}</TableCell>
+                    <TableCell className="text-right">
+                      <div className="flex justify-end gap-1">
+                        <Button size="icon" variant="ghost" className="h-8 w-8">
+                          <RefreshCw className="h-3.5 w-3.5" />
+                        </Button>
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          className="h-8 w-8 text-destructive hover:text-destructive"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </Button>
+                        <Button size="icon" variant="ghost" className="h-8 w-8">
+                          <MoreHorizontal className="h-3.5 w-3.5" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
             </TableBody>
           </Table>
         </div>

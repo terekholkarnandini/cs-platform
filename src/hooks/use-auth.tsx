@@ -166,19 +166,31 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     getInitialSession();
 
     // Listen for auth state changes (login, logout, token refresh, etc.)
+    //
+    // IMPORTANT: Supabase fires TOKEN_REFRESHED on every tab-focus because the
+    // client refreshes the JWT in the background. We must NOT call fetchCompany
+    // on those events or isLoadingCompany flips to true and the spinner shows
+    // indefinitely. We only re-fetch company data when the user identity changes.
+    let lastUserId: string | null = null;
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (_event, session) => {
-      setSession(session);
       const currentUser = session?.user ?? null;
+      const currentUserId = currentUser?.id ?? null;
+
+      setSession(session);
       setUser(currentUser);
       setIsLoading(false);
-      if (currentUser) {
-        await fetchCompany(currentUser);
-      } else {
-        setCompany(null);
-        setOnboardingCompleted(false);
-        setIsLoadingCompany(false);
+
+      if (currentUserId !== lastUserId) {
+        lastUserId = currentUserId;
+        if (currentUser) {
+          await fetchCompany(currentUser);
+        } else {
+          setCompany(null);
+          setOnboardingCompleted(false);
+          setIsLoadingCompany(false);
+        }
       }
     });
 
