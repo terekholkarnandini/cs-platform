@@ -24,6 +24,7 @@ import { Route as AppConversationsRouteImport } from './routes/_app.conversation
 import { Route as AppBusinessRulesRouteImport } from './routes/_app.business-rules'
 import { Route as AppApiKeysRouteImport } from './routes/_app.api-keys'
 import { Route as AppAnalyticsRouteImport } from './routes/_app.analytics'
+import { Route as AppAiPlaygroundRouteImport } from './routes/_app.ai-playground'
 import { Route as AppAiConfigurationRouteImport } from './routes/_app.ai-configuration'
 import { Route as AppAgentsRouteImport } from './routes/_app.agents'
 
@@ -101,6 +102,11 @@ const AppAnalyticsRoute = AppAnalyticsRouteImport.update({
   path: '/analytics',
   getParentRoute: () => AppRoute,
 } as any)
+const AppAiPlaygroundRoute = AppAiPlaygroundRouteImport.update({
+  id: '/ai-playground',
+  path: '/ai-playground',
+  getParentRoute: () => AppRoute,
+} as any)
 const AppAiConfigurationRoute = AppAiConfigurationRouteImport.update({
   id: '/ai-configuration',
   path: '/ai-configuration',
@@ -120,6 +126,7 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/agents': typeof AppAgentsRoute
   '/ai-configuration': typeof AppAiConfigurationRoute
+  '/ai-playground': typeof AppAiPlaygroundRoute
   '/analytics': typeof AppAnalyticsRoute
   '/api-keys': typeof AppApiKeysRoute
   '/business-rules': typeof AppBusinessRulesRoute
@@ -138,6 +145,7 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/agents': typeof AppAgentsRoute
   '/ai-configuration': typeof AppAiConfigurationRoute
+  '/ai-playground': typeof AppAiPlaygroundRoute
   '/analytics': typeof AppAnalyticsRoute
   '/api-keys': typeof AppApiKeysRoute
   '/business-rules': typeof AppBusinessRulesRoute
@@ -158,6 +166,7 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/_app/agents': typeof AppAgentsRoute
   '/_app/ai-configuration': typeof AppAiConfigurationRoute
+  '/_app/ai-playground': typeof AppAiPlaygroundRoute
   '/_app/analytics': typeof AppAnalyticsRoute
   '/_app/api-keys': typeof AppApiKeysRoute
   '/_app/business-rules': typeof AppBusinessRulesRoute
@@ -178,6 +187,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/agents'
     | '/ai-configuration'
+    | '/ai-playground'
     | '/analytics'
     | '/api-keys'
     | '/business-rules'
@@ -196,6 +206,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/agents'
     | '/ai-configuration'
+    | '/ai-playground'
     | '/analytics'
     | '/api-keys'
     | '/business-rules'
@@ -215,6 +226,7 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/_app/agents'
     | '/_app/ai-configuration'
+    | '/_app/ai-playground'
     | '/_app/analytics'
     | '/_app/api-keys'
     | '/_app/business-rules'
@@ -342,6 +354,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAnalyticsRouteImport
       parentRoute: typeof AppRoute
     }
+    '/_app/ai-playground': {
+      id: '/_app/ai-playground'
+      path: '/ai-playground'
+      fullPath: '/ai-playground'
+      preLoaderRoute: typeof AppAiPlaygroundRouteImport
+      parentRoute: typeof AppRoute
+    }
     '/_app/ai-configuration': {
       id: '/_app/ai-configuration'
       path: '/ai-configuration'
@@ -362,6 +381,7 @@ declare module '@tanstack/react-router' {
 interface AppRouteChildren {
   AppAgentsRoute: typeof AppAgentsRoute
   AppAiConfigurationRoute: typeof AppAiConfigurationRoute
+  AppAiPlaygroundRoute: typeof AppAiPlaygroundRoute
   AppAnalyticsRoute: typeof AppAnalyticsRoute
   AppApiKeysRoute: typeof AppApiKeysRoute
   AppBusinessRulesRoute: typeof AppBusinessRulesRoute
@@ -376,6 +396,7 @@ interface AppRouteChildren {
 const AppRouteChildren: AppRouteChildren = {
   AppAgentsRoute: AppAgentsRoute,
   AppAiConfigurationRoute: AppAiConfigurationRoute,
+  AppAiPlaygroundRoute: AppAiPlaygroundRoute,
   AppAnalyticsRoute: AppAnalyticsRoute,
   AppApiKeysRoute: AppApiKeysRoute,
   AppBusinessRulesRoute: AppBusinessRulesRoute,

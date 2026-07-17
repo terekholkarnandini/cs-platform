@@ -12,6 +12,7 @@ import {
   Scale,
   LogOut,
   Sliders,
+  Sparkles,
 } from "lucide-react";
 import { Logo } from "@/components/logo";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -25,6 +26,7 @@ const items = [
   { title: "Conversations", url: "/conversations", icon: MessageSquare },
   { title: "Business Rules", url: "/business-rules", icon: Scale },
   { title: "AI Configuration", url: "/ai-configuration", icon: Sliders },
+  { title: "AI Playground", url: "/ai-playground", icon: Sparkles },
   { title: "Analytics", url: "/analytics", icon: BarChart3 },
   { title: "API Keys", url: "/api-keys", icon: KeyRound },
   { title: "Widget", url: "/widget", icon: Code2 },
