@@ -148,6 +148,7 @@ function Onboarding() {
       }
 
       // 2. Upsert into companies table
+      // 2. Upsert into companies table
       const companyPayload = {
         owner_id: user.id,
         name: name.trim(),
@@ -168,6 +169,23 @@ function Onboarding() {
         throw upsertError;
       }
 
+      // Send welcome email (don't fail onboarding if email fails)
+      try {
+        await fetch("http://localhost:8000/emails/welcome", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email: supportEmail,
+            user_name: user.user_metadata?.full_name || name,
+            company_name: name,
+          }),
+        });
+      } catch (emailError) {
+        console.error("Failed to send welcome email:", emailError);
+      }
+
       toast.success("Workspace configured successfully! Welcome onboard.");
 
       // Refresh auth context which triggers the redirect to dashboard
@@ -176,6 +194,8 @@ function Onboarding() {
       console.error("Onboarding failed:", err);
       toast.error(err.message || "Failed to complete onboarding. Please try again.");
       setIsSaving(false);
+
+
     }
   };
 
@@ -215,13 +235,12 @@ function Onboarding() {
           ].map((item) => (
             <div key={item.s} className="relative z-10 flex flex-col items-center gap-1.5">
               <div
-                className={`h-8 w-8 rounded-full flex items-center justify-center text-xs font-semibold transition-all duration-300 ${
-                  step === item.s
-                    ? "bg-primary text-white ring-4 ring-primary/20 scale-110 shadow-glow"
-                    : step > item.s
-                      ? "bg-primary text-white"
-                      : "bg-card border border-border text-muted-foreground"
-                }`}
+                className={`h-8 w-8 rounded-full flex items-center justify-center text-xs font-semibold transition-all duration-300 ${step === item.s
+                  ? "bg-primary text-white ring-4 ring-primary/20 scale-110 shadow-glow"
+                  : step > item.s
+                    ? "bg-primary text-white"
+                    : "bg-card border border-border text-muted-foreground"
+                  }`}
               >
                 {step > item.s ? <Check className="h-4 w-4" /> : item.s}
               </div>
@@ -414,16 +433,14 @@ function Onboarding() {
                       key={option.id}
                       type="button"
                       onClick={() => setIntegrationType(option.id)}
-                      className={`w-full flex items-start gap-4 rounded-xl border text-left p-4 transition-all duration-200 cursor-pointer ${
-                        selected
-                          ? "border-primary bg-primary-soft ring-2 ring-primary/10 shadow-sm"
-                          : "border-border hover:bg-muted/30"
-                      }`}
+                      className={`w-full flex items-start gap-4 rounded-xl border text-left p-4 transition-all duration-200 cursor-pointer ${selected
+                        ? "border-primary bg-primary-soft ring-2 ring-primary/10 shadow-sm"
+                        : "border-border hover:bg-muted/30"
+                        }`}
                     >
                       <div
-                        className={`grid h-8 w-8 place-items-center rounded-lg ${
-                          selected ? "bg-primary text-white shadow-glow" : "bg-muted text-muted-foreground"
-                        }`}
+                        className={`grid h-8 w-8 place-items-center rounded-lg ${selected ? "bg-primary text-white shadow-glow" : "bg-muted text-muted-foreground"
+                          }`}
                       >
                         <Icon className="h-4 w-4" />
                       </div>

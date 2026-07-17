@@ -2,8 +2,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from knowledge.upload import router as upload_router
 from knowledge.documents import router as documents_router
+from mail import router as email_router
 
 app = FastAPI()
+app.include_router(email_router)
 
 app.add_middleware(
     CORSMiddleware,
