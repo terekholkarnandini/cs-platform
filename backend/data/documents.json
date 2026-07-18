@@ -150,5 +150,14 @@
         "chunks": 3,
         "status": "Indexed",
         "uploaded_at": "2026-07-18T15:52:52.301361"
+    },
+    {
+        "id": "7efa47fb-9340-4e6d-9d36-47641ceef5a4",
+        "company_id": "e26b43ec-95cb-485c-8fef-433af219c0a6",
+        "filename": "ResolveX Overview.pdf",
+        "type": "PDF",
+        "chunks": 9,
+        "status": "Indexed",
+        "uploaded_at": "2026-07-18T17:39:51.656607"
     }
 ]

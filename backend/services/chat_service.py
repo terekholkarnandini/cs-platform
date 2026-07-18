@@ -1,7 +1,8 @@
 import time
 import logging
 import os
-from typing import Dict, Any
+import re
+from typing import Dict, Any, Optional
 from dotenv import load_dotenv
 from supabase import create_client, Client
 
@@ -45,6 +46,34 @@ else:
         print("[ERROR] Failed to initialize Supabase:", e)
         supabase = None
 
+# Admin client (service role) for writing to conversation_history bypassing RLS
+supabase_service_role_key = os.getenv("SUPABASE_SERVICE_ROLE_KEY")
+if supabase_url and supabase_service_role_key:
+    try:
+        admin_supabase = create_client(supabase_url, supabase_service_role_key)
+    except Exception:
+        admin_supabase = supabase
+else:
+    admin_supabase = supabase
+
+# ─── Category keyword detector ────────────────────────────────────────────────
+_CATEGORY_RULES: list[tuple[str, list[str]]] = [
+    ("Delivery",  ["delivery", "shipped", "shipping", "arrive", "arrival", "order", "delayed", "transit", "tracking", "courier"]),
+    ("Refund",    ["refund", "money back", "return", "reimburs", "credit", "cashback"]),
+    ("Billing",   ["billing", "invoice", "charge", "payment", "price", "cost", "fee", "overcharg", "subscription"]),
+    ("Product",   ["product", "item", "quality", "broken", "damaged", "defect", "wrong item", "not working"]),
+    ("Account",   ["account", "login", "password", "email", "profile", "sign in", "access"]),
+    ("Warranty",  ["warranty", "guarantee", "cover", "repair", "replacement"]),
+]
+
+def _detect_category(message: str) -> str:
+    """Return the best-matching support category for a user message."""
+    text = message.lower()
+    for category, keywords in _CATEGORY_RULES:
+        if any(kw in text for kw in keywords):
+            return category
+    return "Other"
+
 class ChatService:
     def __init__(self):
         self.retrieval_service = RetrievalService()
@@ -76,7 +105,8 @@ class ChatService:
                     options=ClientOptions(headers={"Authorization": f"Bearer {token}"})
                 )
             else:
-                req_supabase = supabase
+                # Use admin_supabase (service role client) to bypass RLS for widget/API requests
+                req_supabase = admin_supabase
 
             # 1. Validate company exists and owner check if user_id is provided
             logger.info("====================================")
@@ -218,6 +248,16 @@ class ChatService:
             response_time = f"{total_time:.4f}s"
             self._log_details(company_id, response_time, num_chunks, gemini_model)
 
+            # Persist to Supabase for analytics
+            self._persist_conversation(
+                company_id=company_id,
+                message=message,
+                answer=answer,
+                response_time_ms=int(total_time * 1000),
+                resolved_by_ai=True,
+                confidence_score=round(top_score, 4),
+            )
+
             return {
                 "answer": answer,
                 "sources": [
@@ -245,6 +285,32 @@ class ChatService:
             logger.error(f"Error in chatService: {error_occurred}", exc_info=True)
             self._log_details(company_id, f"{time.time() - start_time:.4f}s", num_chunks, gemini_model, error_occurred)
             raise e
+
+    def _persist_conversation(
+        self,
+        company_id: str,
+        message: str,
+        answer: str,
+        response_time_ms: int,
+        resolved_by_ai: bool,
+        confidence_score: float,
+    ) -> None:
+        """Persist a conversation record to Supabase for analytics. Silently swallows errors."""
+        if not admin_supabase:
+            return
+        try:
+            category = _detect_category(message)
+            admin_supabase.table("conversation_history").insert({
+                "company_id": company_id,
+                "message": message[:2000],   # cap to avoid huge payloads
+                "answer": answer[:4000],
+                "response_time_ms": response_time_ms,
+                "resolved_by_ai": resolved_by_ai,
+                "confidence_score": confidence_score,
+                "category": category,
+            }).execute()
+        except Exception as persist_err:
+            logger.warning(f"[Analytics] Failed to persist conversation: {persist_err}")
 
     def _log_details(self, company_id: str, response_time: str, num_chunks: int, model: str, error: str = None):
         """

@@ -1,0 +1,3 @@
+Supabase URL: https://acwjpjdxelshigsfgbow.supabase.co
+api_keys missing or query error: {'message': "Could not find the table 'public.api_keys' in the schema cache", 'code': 'PGRST205', 'hint': None, 'details': None}
+companies table empty or columns metadata unreachable
