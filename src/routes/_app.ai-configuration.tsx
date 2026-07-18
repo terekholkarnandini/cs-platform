@@ -65,18 +65,15 @@ function AIConfiguration() {
   const [maxTokens, setMaxTokens] = useState<number>(1500);
   const [language, setLanguage] = useState<string>("English");
   const [fallbackResponse, setFallbackResponse] = useState<string>("");
-  const [confidenceThreshold, setConfidenceThreshold] = useState<number>(0.75);
+  const [confidenceThreshold, setConfidenceThreshold] = useState<number>(0.5);
   const [enableStreaming, setEnableStreaming] = useState<boolean>(true);
 
   const loadConfiguration = async () => {
     if (!company?.id) return;
     setIsLoading(true);
     try {
-      let configData = await getAIConfiguration(company.id);
-      if (!configData) {
-        // Automatically create default AI configuration
-        configData = await createAIConfiguration(company.id);
-      }
+      // Automatically retrieve or create default AI configuration atomically
+      const configData = await createAIConfiguration(company.id);
 
       // Populate every UI field
       setModel(configData.model || "gpt-5");
@@ -86,7 +83,7 @@ function AIConfiguration() {
       setMaxTokens(Number(configData.max_tokens ?? 1500));
       setLanguage(configData.language || "English");
       setFallbackResponse(configData.fallback_response || "");
-      setConfidenceThreshold(Number(configData.confidence_threshold ?? 0.75));
+      setConfidenceThreshold(Number(configData.confidence_threshold ?? 0.5));
       setEnableStreaming(configData.enable_streaming ?? true);
     } catch (err: any) {
       console.error(err);
