@@ -109,7 +109,7 @@ class ChatService:
                 "I'm sorry, I couldn't find a reliable answer to that question in our knowledge base. Let me transfer you to a member of our team."
             ) or "I'm sorry, I couldn't find a reliable answer to that question in our knowledge base. Let me transfer you to a member of our team."
             
-            confidence_threshold = float(ai_config.get("confidence_threshold", 0.75))
+            confidence_threshold = float(ai_config.get("confidence_threshold", 0.20))
 
             # 4. Search ChromaDB
             retrieval_start = time.time()
