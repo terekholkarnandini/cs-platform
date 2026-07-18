@@ -141,5 +141,14 @@
         "chunks": 4,
         "status": "Indexed",
         "uploaded_at": "2026-07-18T15:14:20.274927"
+    },
+    {
+        "id": "5c2b995a-2a13-4121-a153-b617f569a94d",
+        "company_id": "a5cfcbfc-8a90-454d-9d9c-46b60fd90a6e",
+        "filename": "WaffleCo_Menu_Knowledge_Base.pdf",
+        "type": "PDF",
+        "chunks": 3,
+        "status": "Indexed",
+        "uploaded_at": "2026-07-18T15:52:52.301361"
     }
 ]

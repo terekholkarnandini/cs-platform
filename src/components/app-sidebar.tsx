@@ -2,7 +2,6 @@ import { Link, useRouterState, useNavigate } from "@tanstack/react-router";
 import {
   LayoutDashboard,
   Database,
-  MessageSquare,
   BarChart3,
   KeyRound,
   Code2,
@@ -21,7 +20,6 @@ import { useAuth } from "@/hooks/use-auth";
 const items = [
   { title: "Dashboard", url: "/dashboard", icon: LayoutDashboard },
   { title: "Knowledge Base", url: "/knowledge-base", icon: Database },
-  { title: "Conversations", url: "/conversations", icon: MessageSquare },
   { title: "Business Rules", url: "/business-rules", icon: Scale },
   { title: "AI Configuration", url: "/ai-configuration", icon: Sliders },
   { title: "AI Playground", url: "/ai-playground", icon: Sparkles },
