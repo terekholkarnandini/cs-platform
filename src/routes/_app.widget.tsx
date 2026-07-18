@@ -25,29 +25,94 @@ export const Route = createFileRoute("/_app/widget")({
 const swatches = ["#10B981", "#334155", "#F59E0B", "#3B82F6", "#EF4444", "#475569"];
 
 function Widget() {
-  const { company } = useAuth();
+  const { company, session } = useAuth();
   const [color, setColor] = useState(swatches[0]);
   const [greeting, setGreeting] = useState("Hi there! 👋 How can I help you today?");
   const [logoUrl, setLogoUrl] = useState("");
+  const [position, setPosition] = useState("br");
+  const [theme, setTheme] = useState("light");
+  const [title, setTitle] = useState("");
+  const [isSaving, setIsSaving] = useState(false);
 
+  // Fetch widget configuration from backend
   useEffect(() => {
-    if (company?.logo_url) {
-      setLogoUrl(company.logo_url);
+    async function loadWidgetSettings() {
+      const token = session?.access_token;
+      if (!token) return;
+      try {
+        const res = await fetch("http://localhost:8000/api/companies/me/widget", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.widget_color) setColor(data.widget_color);
+          if (data.widget_greeting) setGreeting(data.widget_greeting);
+          if (data.widget_position) setPosition(data.widget_position);
+          if (data.widget_theme) setTheme(data.widget_theme);
+          if (data.widget_title) setTitle(data.widget_title);
+          if (data.logo_url) setLogoUrl(data.logo_url);
+          else if (company?.logo_url) setLogoUrl(company.logo_url);
+        }
+      } catch (err) {
+        console.error("Error loading widget settings:", err);
+      }
     }
-  }, [company]);
 
-  const companyName = company?.name || "Acme";
-  const workspaceSlug = company?.name
-    ? company.name.toLowerCase().replace(/[^a-z0-9]+/g, "-")
-    : "acme-inc";
+    if (session?.access_token) {
+      loadWidgetSettings();
+    }
+  }, [session, company]);
 
-  const embedCode = `<script src="https://cdn.supportai.io/w.js"
-  data-workspace="${workspaceSlug}"
+  const companyName = title || company?.name || "Acme";
+
+  // Use the actual company ID as workspace identifier so it resolves reliably
+  const workspaceIdentifier = company?.id || "acme-inc";
+
+  const embedCode = `<script src="http://localhost:8000/api/widget/w.js"
+  data-workspace="${workspaceIdentifier}"
   defer></script>`;
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(embedCode);
     toast.success("Embed code copied to clipboard!");
+  };
+
+  const handleSaveChanges = async () => {
+    const token = session?.access_token;
+    if (!token) {
+      toast.error("You are not authenticated.");
+      return;
+    }
+    setIsSaving(true);
+    try {
+      const res = await fetch("http://localhost:8000/api/companies/me/widget", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          widget_color: color,
+          widget_greeting: greeting,
+          widget_position: position,
+          widget_theme: theme,
+          widget_title: title || `${company?.name || "Acme"} Support`,
+          logo_url: logoUrl,
+        }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to save changes");
+      }
+      toast.success("Widget settings saved successfully!");
+    } catch (err: any) {
+      console.error(err);
+      toast.error(err.message || "Failed to save widget settings.");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -74,6 +139,17 @@ function Widget() {
           </div>
 
           <div className="space-y-1.5">
+            <Label htmlFor="title">Widget Title</Label>
+            <Input
+              id="title"
+              placeholder="Widget Title (defaults to brand name)"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className="rounded-lg"
+            />
+          </div>
+
+          <div className="space-y-1.5">
             <Label htmlFor="greeting">Greeting message</Label>
             <Textarea
               id="greeting"
@@ -86,7 +162,7 @@ function Widget() {
           <div className="grid grid-cols-2 gap-3">
             <div className="space-y-1.5">
               <Label>Position</Label>
-              <Select defaultValue="br">
+              <Select value={position} onValueChange={setPosition}>
                 <SelectTrigger className="rounded-lg">
                   <SelectValue />
                 </SelectTrigger>
@@ -100,7 +176,7 @@ function Widget() {
             </div>
             <div className="space-y-1.5">
               <Label>Theme</Label>
-              <Select defaultValue="light">
+              <Select value={theme} onValueChange={setTheme}>
                 <SelectTrigger className="rounded-lg">
                   <SelectValue />
                 </SelectTrigger>
@@ -140,7 +216,13 @@ function Widget() {
             </div>
           </div>
 
-          <Button className="w-full rounded-lg bg-primary">Save changes</Button>
+          <Button 
+            onClick={handleSaveChanges} 
+            disabled={isSaving} 
+            className="w-full rounded-lg bg-primary"
+          >
+            {isSaving ? "Saving..." : "Save changes"}
+          </Button>
         </div>
 
         {/* Preview */}
