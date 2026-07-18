@@ -123,5 +123,14 @@
         "chunks": 4,
         "status": "Indexed",
         "uploaded_at": "2026-07-17T16:05:23.962475"
+    },
+    {
+        "id": "98aa0794-a64f-4fea-a35d-92cca987eddf",
+        "company_id": "8187a317-a689-4f99-a0a2-71781fa42f2b",
+        "filename": "SupportAI_Knowledge_Base_Myntra.pdf",
+        "type": "PDF",
+        "chunks": 3,
+        "status": "Indexed",
+        "uploaded_at": "2026-07-18T01:37:19.553532"
     }
 ]

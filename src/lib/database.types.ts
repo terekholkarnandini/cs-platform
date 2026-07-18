@@ -145,6 +145,62 @@ export interface Database {
           }
         ]
       }
+      ai_configuration: {
+        Row: {
+          id: string
+          company_id: string
+          model: string
+          response_style: string
+          response_length: string
+          temperature: number
+          max_tokens: number
+          language: string
+          fallback_response: string | null
+          confidence_threshold: number
+          enable_streaming: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          company_id: string
+          model?: string
+          response_style?: string
+          response_length?: string
+          temperature?: number
+          max_tokens?: number
+          language?: string
+          fallback_response?: string | null
+          confidence_threshold?: number
+          enable_streaming?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          company_id?: string
+          model?: string
+          response_style?: string
+          response_length?: string
+          temperature?: number
+          max_tokens?: number
+          language?: string
+          fallback_response?: string | null
+          confidence_threshold?: number
+          enable_streaming?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_configuration_company_id_fkey"
+            columns: ["company_id"]
+            isOneToOne: true
+            referencedRelation: "companies"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
     }
     Views: {
       [key: string]: never
