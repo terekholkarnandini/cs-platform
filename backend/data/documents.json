@@ -150,5 +150,23 @@
         "chunks": 3,
         "status": "Indexed",
         "uploaded_at": "2026-07-18T15:52:52.301361"
+    },
+    {
+        "id": "e8068938-a885-458d-9c54-ef8eafaa2011",
+        "company_id": "a5cfcbfc-8a90-454d-9d9c-46b60fd90a6e",
+        "filename": "WaffleCo_Menu_Pricing_India.pdf",
+        "type": "PDF",
+        "chunks": 2,
+        "status": "Indexed",
+        "uploaded_at": "2026-07-18T18:44:24.559495"
+    },
+    {
+        "id": "61a48f5a-64ad-4c79-b21d-f39b0596f701",
+        "company_id": "a5cfcbfc-8a90-454d-9d9c-46b60fd90a6e",
+        "filename": "WaffleCo_Outlets_and_Services.pdf",
+        "type": "PDF",
+        "chunks": 1,
+        "status": "Indexed",
+        "uploaded_at": "2026-07-18T18:44:32.564996"
     }
 ]
