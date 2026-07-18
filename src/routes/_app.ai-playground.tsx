@@ -598,7 +598,7 @@ function AIPlayground() {
                       { label: "Temperature", val: aiConfig?.temperature?.toFixed(2) ?? "0.20", mono: true },
                       { label: "Max Tokens", val: aiConfig?.max_tokens ?? "1500", mono: true },
                       { label: "Language", val: aiConfig?.language || "English" },
-                      { label: "Confidence Threshold", val: `${Math.round((aiConfig?.confidence_threshold ?? 0.75) * 100)}%`, mono: true },
+                      { label: "Confidence Threshold", val: `${Math.round((aiConfig?.confidence_threshold ?? 0.5) * 100)}%`, mono: true },
                       { label: "Streaming Delivery", val: aiConfig?.enable_streaming ? "Enabled" : "Disabled" },
                     ].map((conf, idx) => (
                       <div key={idx} className="flex justify-between items-center pb-2 border-b border-border/50 last:border-0 last:pb-0">

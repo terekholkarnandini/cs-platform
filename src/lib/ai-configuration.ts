@@ -25,19 +25,21 @@ export async function getAIConfiguration(
     console.error("Error in getAIConfiguration:", error);
     throw error;
   }
-  return data;
+  return data as AIConfigurationRow | null;
 }
 
 /**
  * Creates a default AI configuration row for a given company.
- * The database column defaults are used for every field not supplied.
+ * Uses atomic upsert so that it is safe under concurrent execution.
  */
 export async function createAIConfiguration(
   companyId: string
 ): Promise<AIConfigurationRow> {
   const { data, error } = await supabase
     .from("ai_configuration")
-    .insert({ company_id: companyId } as AIConfigurationInsert)
+    .upsert({ company_id: companyId } as AIConfigurationInsert, {
+      onConflict: "company_id",
+    })
     .select()
     .single();
 
@@ -45,7 +47,7 @@ export async function createAIConfiguration(
     console.error("Error in createAIConfiguration:", error);
     throw error;
   }
-  return data;
+  return data as AIConfigurationRow;
 }
 
 /**
@@ -70,36 +72,32 @@ export async function updateAIConfiguration(
     console.error("Error in updateAIConfiguration:", error);
     throw error;
   }
-  return updatedData;
+  return updatedData as AIConfigurationRow;
 }
 
 /**
  * Safely upserts the AI configuration for a given company.
- * - If a row exists  → UPDATE (no duplicate created)
- * - If no row exists → INSERT with provided data + DB defaults
+ * Uses atomic upsert with target company_id to handle concurrency.
  */
 export async function upsertAIConfiguration(
   companyId: string,
   data: Omit<AIConfigurationUpdate, "company_id">
 ): Promise<AIConfigurationRow> {
-  const existing = await getAIConfiguration(companyId);
-
-  if (existing) {
-    return updateAIConfiguration(companyId, data);
-  }
-
-  const { data: insertedData, error } = await supabase
+  const { data: upsertedData, error } = await supabase
     .from("ai_configuration")
-    .insert({
+    .upsert({
       ...data,
       company_id: companyId,
-    } as AIConfigurationInsert)
+      updated_at: new Date().toISOString(),
+    } as AIConfigurationInsert, {
+      onConflict: "company_id",
+    })
     .select()
     .single();
 
   if (error) {
-    console.error("Error in upsertAIConfiguration (insert):", error);
+    console.error("Error in upsertAIConfiguration:", error);
     throw error;
   }
-  return insertedData;
+  return upsertedData as AIConfigurationRow;
 }
